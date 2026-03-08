@@ -4,58 +4,66 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Brújula Emocional</title>
-<meta name="theme-color" content="#8b5cf6">
+<meta name="theme-color" content="#7c3aed">
 <style>
 :root{
-  --bg:#0b1020;
-  --bg-soft:#121933;
-  --panel:#18213f;
-  --panel-2:#1d2850;
-  --text:#edf2ff;
-  --muted:#a9b6da;
-  --line:#2a3967;
-  --accent:#8b5cf6;
-  --accent-2:#c084fc;
-  --good:#4ade80;
-  --warn:#fbbf24;
-  --bad:#fb7185;
-  --chip:#121a34;
-  --chip-on:#263b7d;
-  --hero1:rgba(139,92,246,.18);
-  --hero2:rgba(59,130,246,.14);
-  --shadow:0 18px 40px rgba(0,0,0,.28);
+  --bg:#0f172a;
+  --bg-soft:#172033;
+  --panel:#1b2740;
+  --panel-2:#22304f;
+  --text:#eef4ff;
+  --muted:#adbad8;
+  --line:#314363;
+  --accent:#7c3aed;
+  --accent-2:#a78bfa;
+  --good:#22c55e;
+  --warn:#f59e0b;
+  --bad:#f43f5e;
+  --chip:#162037;
+  --chip-on:#26375f;
+  --hero1:rgba(124,58,237,.16);
+  --hero2:rgba(59,130,246,.10);
+  --shadow:0 18px 40px rgba(0,0,0,.26);
 }
 
-/* TEMAS */
+/* SOLO 1 OSCURO */
+body.theme-noche{
+  --bg:#0f172a; --bg-soft:#172033; --panel:#1b2740; --panel-2:#22304f;
+  --text:#eef4ff; --muted:#adbad8; --line:#314363; --accent:#7c3aed; --accent-2:#a78bfa;
+  --good:#22c55e; --warn:#f59e0b; --bad:#f43f5e; --chip:#162037; --chip-on:#26375f;
+  --hero1:rgba(124,58,237,.16); --hero2:rgba(59,130,246,.10); --shadow:0 18px 40px rgba(0,0,0,.26);
+}
+
+/* CLAROS */
 body.theme-orquidea{
-  --bg:#0b1020; --bg-soft:#121933; --panel:#18213f; --panel-2:#1d2850;
-  --text:#edf2ff; --muted:#a9b6da; --line:#2a3967; --accent:#8b5cf6; --accent-2:#c084fc;
-  --good:#4ade80; --warn:#fbbf24; --bad:#fb7185; --chip:#121a34; --chip-on:#263b7d;
-  --hero1:rgba(139,92,246,.18); --hero2:rgba(59,130,246,.14); --shadow:0 18px 40px rgba(0,0,0,.28);
+  --bg:#f7f2ff; --bg-soft:#fcf8ff; --panel:#ffffff; --panel-2:#f7f1ff;
+  --text:#2a1f43; --muted:#76688f; --line:#e6daf7; --accent:#9b5de5; --accent-2:#c77dff;
+  --good:#16a34a; --warn:#d97706; --bad:#e11d48; --chip:#f5efff; --chip-on:#eadcff;
+  --hero1:rgba(155,93,229,.12); --hero2:rgba(199,125,255,.10); --shadow:0 14px 28px rgba(99,81,132,.10);
 }
 body.theme-cielo{
-  --bg:#071824; --bg-soft:#0d2231; --panel:#102a3c; --panel-2:#14364c;
-  --text:#effbff; --muted:#a7d1df; --line:#26506a; --accent:#38bdf8; --accent-2:#67e8f9;
-  --good:#34d399; --warn:#fbbf24; --bad:#fb7185; --chip:#0d2030; --chip-on:#1f4866;
-  --hero1:rgba(56,189,248,.18); --hero2:rgba(103,232,249,.12); --shadow:0 18px 40px rgba(0,0,0,.26);
+  --bg:#eef8ff; --bg-soft:#f8fcff; --panel:#ffffff; --panel-2:#f1f9ff;
+  --text:#18324a; --muted:#64829a; --line:#d7eaf7; --accent:#38bdf8; --accent-2:#67e8f9;
+  --good:#16a34a; --warn:#d97706; --bad:#e11d48; --chip:#edf8ff; --chip-on:#d9f1ff;
+  --hero1:rgba(56,189,248,.12); --hero2:rgba(103,232,249,.10); --shadow:0 14px 28px rgba(60,117,149,.10);
 }
 body.theme-bosque{
-  --bg:#081712; --bg-soft:#10231b; --panel:#143126; --panel-2:#1a3b2f;
-  --text:#effff6; --muted:#a7d1bd; --line:#2f5d4d; --accent:#22c55e; --accent-2:#86efac;
-  --good:#4ade80; --warn:#fbbf24; --bad:#fb7185; --chip:#11261d; --chip-on:#24513f;
-  --hero1:rgba(34,197,94,.18); --hero2:rgba(134,239,172,.10); --shadow:0 18px 40px rgba(0,0,0,.26);
+  --bg:#f2fbf5; --bg-soft:#f8fdfa; --panel:#ffffff; --panel-2:#f3fbf5;
+  --text:#1d3a2b; --muted:#6b8d79; --line:#d7ebdd; --accent:#22c55e; --accent-2:#86efac;
+  --good:#16a34a; --warn:#d97706; --bad:#e11d48; --chip:#eefaf1; --chip-on:#d8f4df;
+  --hero1:rgba(34,197,94,.12); --hero2:rgba(134,239,172,.09); --shadow:0 14px 28px rgba(73,124,89,.10);
 }
 body.theme-aurora{
-  --bg:#14101d; --bg-soft:#1d1630; --panel:#261d3d; --panel-2:#2d2348;
-  --text:#faf3ff; --muted:#d2b7e8; --line:#523d77; --accent:#ec4899; --accent-2:#a855f7;
-  --good:#4ade80; --warn:#f59e0b; --bad:#fb7185; --chip:#21182f; --chip-on:#4b2d72;
-  --hero1:rgba(236,72,153,.18); --hero2:rgba(168,85,247,.10); --shadow:0 18px 40px rgba(0,0,0,.28);
+  --bg:#fff2fa; --bg-soft:#fff8fc; --panel:#ffffff; --panel-2:#fff1f8;
+  --text:#4a2142; --muted:#936d8b; --line:#f0d8e9; --accent:#ec4899; --accent-2:#a855f7;
+  --good:#16a34a; --warn:#d97706; --bad:#e11d48; --chip:#fff0f8; --chip-on:#f8d9ee;
+  --hero1:rgba(236,72,153,.12); --hero2:rgba(168,85,247,.10); --shadow:0 14px 28px rgba(132,86,118,.10);
 }
-body.theme-claro{
-  --bg:#eef4ff; --bg-soft:#f8fbff; --panel:#ffffff; --panel-2:#f5f8ff;
-  --text:#172033; --muted:#5f6f95; --line:#d8e1f2; --accent:#7c3aed; --accent-2:#a78bfa;
-  --good:#16a34a; --warn:#d97706; --bad:#e11d48; --chip:#eef3ff; --chip-on:#ddd9ff;
-  --hero1:rgba(124,58,237,.10); --hero2:rgba(59,130,246,.08); --shadow:0 14px 30px rgba(46,67,111,.10);
+body.theme-vino{
+  --bg:#fff4f6; --bg-soft:#fff9fa; --panel:#ffffff; --panel-2:#fff1f3;
+  --text:#4a1f2d; --muted:#8f6876; --line:#f1d8e0; --accent:#9f1239; --accent-2:#be185d;
+  --good:#16a34a; --warn:#d97706; --bad:#dc2626; --chip:#fff0f3; --chip-on:#f7d7df;
+  --hero1:rgba(159,18,57,.10); --hero2:rgba(190,24,93,.08); --shadow:0 14px 28px rgba(130,86,99,.10);
 }
 
 *{box-sizing:border-box}
@@ -77,15 +85,14 @@ header{
   background:color-mix(in srgb, var(--bg) 82%, transparent);
 }
 .wrap{max-width:1240px;margin:auto}
-.topbar{display:flex;gap:12px;flex-wrap:wrap;align-items:center}
+.topbar,.badges,.themeBar,.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
 .brand{flex:1;min-width:250px}
 h1{margin:0;font-size:22px;letter-spacing:.2px}
 .sub{margin-top:5px;font-size:12px;color:var(--muted)}
-.badges,.themeBar,.row{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
 .pill{
   display:inline-flex;align-items:center;gap:8px;
   padding:8px 12px;border-radius:999px;border:1px solid var(--line);
-  background:color-mix(in srgb, var(--panel) 90%, transparent);
+  background:color-mix(in srgb, var(--panel) 92%, transparent);
   color:var(--muted);font-size:12px
 }
 main{max-width:1240px;margin:18px auto;padding:0 12px 28px}
@@ -132,7 +139,7 @@ textarea{resize:vertical;min-height:84px}
 .btn.sec{background:transparent;border:1px solid var(--line);color:var(--text)}
 .btn.good{background:var(--good);color:#072514}
 .btn.warn{background:var(--warn);color:#2b2004}
-.btn.bad{background:var(--bad);color:#320813}
+.btn.bad{background:var(--bad);color:#fff}
 .chips{display:flex;flex-wrap:wrap;gap:8px}
 .chip{
   padding:8px 11px;border-radius:999px;border:1px solid var(--line);
@@ -189,12 +196,10 @@ canvas{
 .reflectionItem{
   padding:10px 12px;border-radius:12px;border:1px solid var(--line);background:var(--chip);margin-top:10px
 }
-.author{
-  font-size:12px;color:var(--muted);margin-top:8px
-}
+.author{font-size:12px;color:var(--muted);margin-top:8px}
 </style>
 </head>
-<body class="theme-orquidea">
+<body class="theme-noche">
 <header>
   <div class="wrap">
     <div class="topbar">
@@ -210,11 +215,12 @@ canvas{
     </div>
 
     <div class="themeBar" style="margin-top:10px">
-      <button class="themeBtn active" data-theme="orquidea"><span class="themePreview" style="background:#8b5cf6"></span>Orquídea</button>
+      <button class="themeBtn active" data-theme="noche"><span class="themePreview" style="background:#7c3aed"></span>Noche</button>
+      <button class="themeBtn" data-theme="orquidea"><span class="themePreview" style="background:#c77dff"></span>Orquídea</button>
       <button class="themeBtn" data-theme="cielo"><span class="themePreview" style="background:#38bdf8"></span>Cielo</button>
       <button class="themeBtn" data-theme="bosque"><span class="themePreview" style="background:#22c55e"></span>Bosque</button>
       <button class="themeBtn" data-theme="aurora"><span class="themePreview" style="background:#ec4899"></span>Aurora</button>
-      <button class="themeBtn" data-theme="claro"><span class="themePreview" style="background:#d8b4fe"></span>Claro</button>
+      <button class="themeBtn" data-theme="vino"><span class="themePreview" style="background:#9f1239"></span>Vino</button>
     </div>
   </div>
 </header>
@@ -247,7 +253,7 @@ canvas{
           </div>
           <div class="miniStat">
             <div class="small">Tema activo</div>
-            <div class="v" id="heroTheme">Orquídea</div>
+            <div class="v" id="heroTheme">Noche</div>
           </div>
         </div>
       </div>
@@ -546,7 +552,7 @@ canvas{
     <ul class="listClean">
       <li>Puedes elegir temas de color.</li>
       <li>Puedes guardar, exportar e importar tus registros.</li>
-      <li>El tema claro tiene exactamente el mismo diseño que los temas oscuros.</li>
+      <li>Ahora hay un solo tema oscuro y cinco temas claros.</li>
     </ul>
     <div class="row" style="margin-top:16px">
       <button class="btn main" id="closeWelcomeBtn">Comenzar</button>
@@ -556,81 +562,25 @@ canvas{
 
 <script>
 (() => {
-  const DATA_KEY = "brujula_emocional_v2";
+  const DATA_KEY = "brujula_emocional_v3";
   const THEME_KEY = "brujula_emocional_theme";
   const FIRST_KEY = "brujula_emocional_first_open";
 
   const quotesByEmotion = {
-    calma: [
-      "Puedo seguir cuidando esta paz.",
-      "La calma también merece espacio.",
-      "No tengo que estar mal para escucharme."
-    ],
-    alegria: [
-      "También puedo registrar los días buenos.",
-      "La alegría también cuenta.",
-      "Reconocer lo bueno fortalece mi equilibrio."
-    ],
-    estres: [
-      "Puedo ir una cosa a la vez.",
-      "No todo se resuelve hoy.",
-      "Una pausa también es avanzar."
-    ],
-    tristeza: [
-      "Lo que siento merece ternura, no castigo.",
-      "Puedo estar triste sin dejar de cuidarme.",
-      "No tengo que apurar mi proceso."
-    ],
-    enojo: [
-      "Puedo sentir enojo sin dañarme ni dañar.",
-      "Respirar antes de reaccionar también es fuerza.",
-      "Mi emoción tiene un mensaje, no una orden."
-    ],
-    ansiedad: [
-      "Puedo sentir esto sin obedecer a la urgencia.",
-      "La ansiedad sube y baja; yo puedo acompañarme.",
-      "Primero respiro, luego decido."
-    ],
-    miedo: [
-      "Puedo darme seguridad paso a paso.",
-      "No necesito tener todo resuelto para seguir.",
-      "Mi cuerpo merece calma mientras mi mente se aclara."
-    ],
-    frustracion: [
-      "Lo difícil no significa que yo esté fallando.",
-      "Puedo reajustar, no rendirme.",
-      "Hoy avanzo como puedo."
-    ],
-    culpa: [
-      "Puedo revisar mis actos sin destruirme.",
-      "Aprender vale más que castigarme.",
-      "Cometer errores no borra mi valor."
-    ],
-    verguenza: [
-      "Puedo hablarme con más respeto.",
-      "Mi valor no desaparece por un momento difícil.",
-      "No necesito esconderme para merecer cuidado."
-    ],
-    soledad: [
-      "Puedo acompañarme mientras busco conexión.",
-      "Sentirme sola/o no significa que no importe.",
-      "Pedir compañía también es valentía."
-    ],
-    confusion: [
-      "No entender todo hoy también está permitido.",
-      "Puedo ir aclarando una cosa a la vez.",
-      "La claridad no siempre llega de golpe."
-    ],
-    esperanza: [
-      "La esperanza también necesita cuidado.",
-      "Puedo confiar sin dejar de observarme.",
-      "Esto puede mejorar paso a paso."
-    ],
-    otro: [
-      "Lo que siento merece atención.",
-      "Puedo darme un poco de amabilidad hoy.",
-      "Escucharme ya es una forma de cuidado."
-    ]
+    calma: ["Puedo seguir cuidando esta paz.","La calma también merece espacio.","No tengo que estar mal para escucharme."],
+    alegria: ["También puedo registrar los días buenos.","La alegría también cuenta.","Reconocer lo bueno fortalece mi equilibrio."],
+    estres: ["Puedo ir una cosa a la vez.","No todo se resuelve hoy.","Una pausa también es avanzar."],
+    tristeza: ["Lo que siento merece ternura, no castigo.","Puedo estar triste sin dejar de cuidarme.","No tengo que apurar mi proceso."],
+    enojo: ["Puedo sentir enojo sin dañarme ni dañar.","Respirar antes de reaccionar también es fuerza.","Mi emoción tiene un mensaje, no una orden."],
+    ansiedad: ["Puedo sentir esto sin obedecer a la urgencia.","La ansiedad sube y baja; yo puedo acompañarme.","Primero respiro, luego decido."],
+    miedo: ["Puedo darme seguridad paso a paso.","No necesito tener todo resuelto para seguir.","Mi cuerpo merece calma mientras mi mente se aclara."],
+    frustracion: ["Lo difícil no significa que yo esté fallando.","Puedo reajustar, no rendirme.","Hoy avanzo como puedo."],
+    culpa: ["Puedo revisar mis actos sin destruirme.","Aprender vale más que castigarme.","Cometer errores no borra mi valor."],
+    verguenza: ["Puedo hablarme con más respeto.","Mi valor no desaparece por un momento difícil.","No necesito esconderme para merecer cuidado."],
+    soledad: ["Puedo acompañarme mientras busco conexión.","Sentirme sola/o no significa que no importe.","Pedir compañía también es valentía."],
+    confusion: ["No entender todo hoy también está permitido.","Puedo ir aclarando una cosa a la vez.","La claridad no siempre llega de golpe."],
+    esperanza: ["La esperanza también necesita cuidado.","Puedo confiar sin dejar de observarme.","Esto puede mejorar paso a paso."],
+    otro: ["Lo que siento merece atención.","Puedo darme un poco de amabilidad hoy.","Escucharme ya es una forma de cuidado."]
   };
 
   const generalQuotes = [
@@ -639,63 +589,31 @@ canvas{
     "Nombrar lo que siento ya es una forma de cuidarme.",
     "Una emoción intensa no dura para siempre.",
     "Puedo pausar antes de reaccionar.",
-    "Hoy no necesito ser perfecta/o, solo honesta/o conmigo.",
-    "Descansar también es valioso.",
-    "Pedir ayuda también es fortaleza.",
-    "Puedo acompañarme con más amabilidad.",
-    "No todo pensamiento es una verdad."
+    "Hoy no necesito ser perfecta/o, solo honesta/o conmigo."
   ];
 
   const $ = (id) => document.getElementById(id);
 
   const ui = {
-    date: $("date"),
-    time: $("time"),
-    profile: $("profile"),
-    area: $("area"),
-    emotion: $("emotion"),
-    intensity: $("intensity"),
-    energy: $("energy"),
-    trigger: $("trigger"),
-    thoughts: $("thoughts"),
-    helped: $("helped"),
-    support: $("support"),
-    note: $("note"),
-    saveBtn: $("saveBtn"),
-    quickBtn: $("quickBtn"),
-    clearBtn: $("clearBtn"),
-    saveMsg: $("saveMsg"),
-    todayPill: $("todayPill"),
-    weekPill: $("weekPill"),
-    countPill: $("countPill"),
-    todayTable: $("todayTable"),
-    historyTable: $("historyTable"),
-    quote: $("quote"),
-    quoteSub: $("quoteSub"),
-    newQuoteBtn: $("newQuoteBtn"),
-    wkCount: $("wkCount"),
-    wkAvg: $("wkAvg"),
-    wkHelped: $("wkHelped"),
-    weekTable: $("weekTable"),
-    insightBox: $("insightBox"),
-    exportBtn: $("exportBtn"),
-    deleteAllBtn: $("deleteAllBtn"),
-    importFile: $("importFile"),
-    importMsg: $("importMsg"),
+    date: $("date"), time: $("time"), profile: $("profile"), area: $("area"),
+    emotion: $("emotion"), intensity: $("intensity"), energy: $("energy"),
+    trigger: $("trigger"), thoughts: $("thoughts"), helped: $("helped"),
+    support: $("support"), note: $("note"), saveBtn: $("saveBtn"),
+    quickBtn: $("quickBtn"), clearBtn: $("clearBtn"), saveMsg: $("saveMsg"),
+    todayPill: $("todayPill"), weekPill: $("weekPill"), countPill: $("countPill"),
+    todayTable: $("todayTable"), historyTable: $("historyTable"),
+    quote: $("quote"), quoteSub: $("quoteSub"), newQuoteBtn: $("newQuoteBtn"),
+    wkCount: $("wkCount"), wkAvg: $("wkAvg"), wkHelped: $("wkHelped"),
+    weekTable: $("weekTable"), insightBox: $("insightBox"),
+    exportBtn: $("exportBtn"), deleteAllBtn: $("deleteAllBtn"),
+    importFile: $("importFile"), importMsg: $("importMsg"),
     moodBtns: [...document.querySelectorAll(".moodBtn")],
     bodyChips: [...document.querySelectorAll("#bodyChips .chip")],
     careChips: [...document.querySelectorAll("#careChips .chip")],
     themeBtns: [...document.querySelectorAll(".themeBtn")],
-    weekChart: $("weekChart"),
-    reflect1: $("reflect1"),
-    reflect2: $("reflect2"),
-    reflect3: $("reflect3"),
-    heroToday: $("heroToday"),
-    heroWeekAvg: $("heroWeekAvg"),
-    heroEmotion: $("heroEmotion"),
-    heroTheme: $("heroTheme"),
-    welcomeOverlay: $("welcomeOverlay"),
-    closeWelcomeBtn: $("closeWelcomeBtn")
+    weekChart: $("weekChart"), reflect1: $("reflect1"), reflect2: $("reflect2"), reflect3: $("reflect3"),
+    heroToday: $("heroToday"), heroWeekAvg: $("heroWeekAvg"), heroEmotion: $("heroEmotion"), heroTheme: $("heroTheme"),
+    welcomeOverlay: $("welcomeOverlay"), closeWelcomeBtn: $("closeWelcomeBtn")
   };
 
   function todayISO(d = new Date()){
@@ -781,11 +699,12 @@ canvas{
 
   function themeLabel(theme){
     return {
+      noche:"Noche",
       orquidea:"Orquídea",
       cielo:"Cielo",
       bosque:"Bosque",
       aurora:"Aurora",
-      claro:"Claro"
+      vino:"Vino"
     }[theme] || theme;
   }
 
@@ -801,11 +720,9 @@ canvas{
   }
 
   function initTheme(){
-    const saved = localStorage.getItem(THEME_KEY) || "orquidea";
+    const saved = localStorage.getItem(THEME_KEY) || "noche";
     setTheme(saved);
-    ui.themeBtns.forEach(btn => {
-      btn.addEventListener("click", () => setTheme(btn.dataset.theme));
-    });
+    ui.themeBtns.forEach(btn => btn.addEventListener("click", () => setTheme(btn.dataset.theme)));
   }
 
   function initMoodButtons(){
@@ -828,9 +745,7 @@ canvas{
       if(on) found = true;
     });
     setQuoteForEmotion(mood);
-    if(!found){
-      ui.moodBtns.forEach(btn => btn.classList.remove("active"));
-    }
+    if(!found) ui.moodBtns.forEach(btn => btn.classList.remove("active"));
   }
 
   function setQuoteForEmotion(emotion){
@@ -980,7 +895,6 @@ canvas{
     let weekCount = 0;
     let helpedCount = 0;
     const allIntensity = [];
-
     ui.weekTable.innerHTML = "";
     let any = false;
 
@@ -1200,16 +1114,13 @@ canvas{
 
   function maybeShowWelcome(){
     const seen = localStorage.getItem(FIRST_KEY);
-    if(!seen){
-      ui.welcomeOverlay.style.display = "flex";
-    }
+    if(!seen) ui.welcomeOverlay.style.display = "flex";
   }
 
   function init(){
     ui.date.value = todayISO();
     ui.time.value = nowTime();
     randomGeneralQuote();
-
     initTheme();
     initMoodButtons();
     maybeShowWelcome();
