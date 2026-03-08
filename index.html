@@ -3,135 +3,200 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Registro emocional personal</title>
-
+<title>Brújula Emocional</title>
+<meta name="theme-color" content="#7c3aed">
 <style>
 :root{
-  --bg:#0f172a;
-  --bg2:#111827;
-  --card:#172036;
-  --card2:#1c2942;
-  --text:#eef4ff;
-  --muted:#a8b6d6;
-  --line:#2a3a5f;
+  --bg:#0b1020;
+  --bg-soft:#121933;
+  --card:#18213f;
+  --card-2:#1d2850;
+  --text:#edf2ff;
+  --muted:#a9b6da;
+  --line:#2a3967;
   --accent:#8b5cf6;
-  --accent2:#c084fc;
+  --accent-2:#c084fc;
   --good:#4ade80;
   --warn:#fbbf24;
   --bad:#fb7185;
-  --soft:#93c5fd;
-  --chip:#10192d;
-  --chipOn:#243b73;
+  --chip:#121a34;
+  --chip-on:#263b7d;
   --shadow:0 18px 40px rgba(0,0,0,.28);
+}
+
+/* TEMAS */
+body.theme-orquidea{
+  --bg:#0b1020;
+  --bg-soft:#121933;
+  --card:#18213f;
+  --card-2:#1d2850;
+  --text:#edf2ff;
+  --muted:#a9b6da;
+  --line:#2a3967;
+  --accent:#8b5cf6;
+  --accent-2:#c084fc;
+  --good:#4ade80;
+  --warn:#fbbf24;
+  --bad:#fb7185;
+  --chip:#121a34;
+  --chip-on:#263b7d;
+}
+body.theme-cielo{
+  --bg:#071824;
+  --bg-soft:#0d2231;
+  --card:#102a3c;
+  --card-2:#14364c;
+  --text:#effbff;
+  --muted:#a7d1df;
+  --line:#26506a;
+  --accent:#38bdf8;
+  --accent-2:#67e8f9;
+  --good:#34d399;
+  --warn:#fbbf24;
+  --bad:#fb7185;
+  --chip:#0d2030;
+  --chip-on:#1f4866;
+}
+body.theme-bosque{
+  --bg:#081712;
+  --bg-soft:#10231b;
+  --card:#143126;
+  --card-2:#1a3b2f;
+  --text:#effff6;
+  --muted:#a7d1bd;
+  --line:#2f5d4d;
+  --accent:#22c55e;
+  --accent-2:#86efac;
+  --good:#4ade80;
+  --warn:#fbbf24;
+  --bad:#fb7185;
+  --chip:#11261d;
+  --chip-on:#24513f;
+}
+body.theme-aurora{
+  --bg:#14101d;
+  --bg-soft:#1d1630;
+  --card:#261d3d;
+  --card-2:#2d2348;
+  --text:#faf3ff;
+  --muted:#d2b7e8;
+  --line:#523d77;
+  --accent:#ec4899;
+  --accent-2:#a855f7;
+  --good:#4ade80;
+  --warn:#f59e0b;
+  --bad:#fb7185;
+  --chip:#21182f;
+  --chip-on:#4b2d72;
+}
+body.theme-claro{
+  --bg:#eef4ff;
+  --bg-soft:#f7faff;
+  --card:#ffffff;
+  --card-2:#f6f8ff;
+  --text:#172033;
+  --muted:#5f6f95;
+  --line:#d8e1f2;
+  --accent:#7c3aed;
+  --accent-2:#a78bfa;
+  --good:#16a34a;
+  --warn:#d97706;
+  --bad:#e11d48;
+  --chip:#eef3ff;
+  --chip-on:#ddd9ff;
+  --shadow:0 14px 30px rgba(46,67,111,.10);
 }
 
 *{box-sizing:border-box}
 html,body{margin:0;padding:0}
 body{
+  min-height:100vh;
   font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
   color:var(--text);
   background:
-    radial-gradient(circle at top left, rgba(139,92,246,.18), transparent 25%),
-    radial-gradient(circle at top right, rgba(59,130,246,.12), transparent 22%),
-    linear-gradient(160deg, #0b1120, #111827 45%, #0f172a);
-  min-height:100vh;
+    radial-gradient(circle at top left, color-mix(in srgb, var(--accent) 22%, transparent), transparent 24%),
+    radial-gradient(circle at top right, color-mix(in srgb, var(--accent-2) 16%, transparent), transparent 22%),
+    linear-gradient(160deg,var(--bg),var(--bg-soft));
 }
-
 header{
   position:sticky;
   top:0;
-  z-index:20;
-  backdrop-filter:blur(10px);
-  background:rgba(10,16,30,.86);
-  border-bottom:1px solid var(--line);
+  z-index:30;
   padding:14px 16px;
+  border-bottom:1px solid var(--line);
+  backdrop-filter:blur(10px);
+  background:color-mix(in srgb, var(--bg) 78%, transparent);
 }
-
 .wrap{
   max-width:1200px;
   margin:auto;
-  padding:0 12px;
 }
-
 .topbar{
   display:flex;
   gap:12px;
-  align-items:center;
   flex-wrap:wrap;
+  align-items:center;
 }
-
 .brand{
   flex:1;
   min-width:250px;
 }
-
 h1{
   margin:0;
-  font-size:20px;
+  font-size:22px;
   letter-spacing:.2px;
 }
-
 .sub{
-  margin-top:4px;
-  color:var(--muted);
+  margin-top:5px;
   font-size:12px;
+  color:var(--muted);
 }
-
-.badges{
+.badges,.themeBar{
   display:flex;
-  gap:8px;
   flex-wrap:wrap;
+  gap:8px;
 }
-
 .pill{
   display:inline-flex;
   align-items:center;
   gap:8px;
   padding:8px 12px;
-  border:1px solid var(--line);
   border-radius:999px;
-  background:rgba(18,27,46,.95);
+  border:1px solid var(--line);
+  background:color-mix(in srgb, var(--card) 90%, transparent);
   color:var(--muted);
   font-size:12px;
 }
-
 main{
   max-width:1200px;
   margin:18px auto;
-  padding:0 12px 28px;
+  padding:0 12px 26px;
 }
-
 .grid{
   display:grid;
   grid-template-columns:1.15fr .85fr;
   gap:16px;
 }
-@media (max-width: 980px){
+@media (max-width:980px){
   .grid{grid-template-columns:1fr}
 }
-
 .card{
-  background:linear-gradient(180deg, rgba(23,32,54,.95), rgba(18,26,44,.96));
+  background:linear-gradient(180deg, color-mix(in srgb, var(--card) 95%, transparent), color-mix(in srgb, var(--card-2) 96%, transparent));
   border:1px solid var(--line);
-  border-radius:18px;
+  border-radius:20px;
   box-shadow:var(--shadow);
   padding:16px;
   margin-bottom:16px;
 }
-
 h2{
   margin:0 0 10px;
-  font-size:15px;
+  font-size:16px;
 }
-h3{
-  margin:0 0 8px;
-  font-size:14px;
+p{margin:0;line-height:1.45}
+.small{
+  font-size:12px;
+  color:var(--muted);
 }
-p{
-  margin:0;
-  line-height:1.45;
-}
-
 .row{
   display:flex;
   gap:10px;
@@ -142,99 +207,114 @@ p{
   flex:1;
   min-width:220px;
 }
-
 label{
   display:block;
-  font-size:12px;
-  color:var(--muted);
   margin:10px 0 6px;
+  color:var(--muted);
+  font-size:12px;
 }
-
 input,select,textarea{
   width:100%;
-  border:1px solid var(--line);
-  background:#0f172a;
-  color:var(--text);
-  border-radius:12px;
   padding:11px 12px;
+  border-radius:12px;
+  border:1px solid var(--line);
+  background:var(--chip);
+  color:var(--text);
   outline:none;
   font:inherit;
 }
 input:focus,select:focus,textarea:focus{
-  border-color:var(--accent2);
-  box-shadow:0 0 0 3px rgba(192,132,252,.14);
+  border-color:var(--accent-2);
+  box-shadow:0 0 0 3px color-mix(in srgb, var(--accent) 18%, transparent);
 }
 textarea{
   resize:vertical;
   min-height:84px;
 }
-
 .btn{
-  border:none;
-  cursor:pointer;
-  border-radius:12px;
   padding:11px 14px;
+  border:none;
+  border-radius:12px;
+  cursor:pointer;
   font-weight:800;
-  font-size:14px;
   transition:.18s ease;
 }
 .btn:hover{transform:translateY(-1px)}
 .btn.main{
-  background:linear-gradient(135deg,var(--accent),var(--accent2));
+  background:linear-gradient(135deg,var(--accent),var(--accent-2));
   color:white;
 }
 .btn.sec{
   background:transparent;
-  color:var(--text);
   border:1px solid var(--line);
+  color:var(--text);
 }
 .btn.good{
   background:var(--good);
-  color:#082511;
+  color:#072514;
 }
 .btn.warn{
   background:var(--warn);
-  color:#2a2006;
+  color:#2b2004;
 }
 .btn.bad{
   background:var(--bad);
-  color:#300912;
+  color:#320813;
 }
-
 .chips{
   display:flex;
-  gap:8px;
   flex-wrap:wrap;
+  gap:8px;
 }
 .chip{
+  padding:8px 11px;
+  border-radius:999px;
   border:1px solid var(--line);
   background:var(--chip);
-  color:var(--text);
-  border-radius:999px;
-  padding:8px 10px;
   font-size:12px;
   cursor:pointer;
   user-select:none;
 }
 .chip[data-on="1"]{
-  background:var(--chipOn);
-  border-color:#4f6fb7;
-}
-
-.small{
-  font-size:12px;
-  color:var(--muted);
+  background:var(--chip-on);
+  border-color:color-mix(in srgb, var(--accent) 55%, white);
 }
 .tag{
   display:inline-flex;
   align-items:center;
   gap:6px;
   padding:6px 10px;
-  border-radius:999px;
   border:1px solid var(--line);
-  background:#10192d;
+  border-radius:999px;
+  background:var(--chip);
   color:var(--muted);
   font-size:11px;
+}
+.tableWrap{
+  overflow:auto;
+  border:1px solid var(--line);
+  border-radius:14px;
+  margin-top:10px;
+}
+table{
+  width:100%;
+  border-collapse:collapse;
+  font-size:12px;
+}
+th,td{
+  padding:9px 7px;
+  border-bottom:1px solid var(--line);
+  text-align:left;
+  vertical-align:top;
+}
+th{
+  color:var(--muted);
+  font-weight:800;
+}
+.empty{
+  padding:16px;
+  color:var(--muted);
+  font-size:12px;
 }
 .kpis{
   display:flex;
@@ -244,87 +324,104 @@ textarea{
 }
 .kpi{
   flex:1;
-  min-width:150px;
+  min-width:140px;
   padding:12px;
-  border-radius:14px;
   border:1px solid var(--line);
-  background:rgba(12,20,40,.9);
+  border-radius:14px;
+  background:var(--chip);
 }
 .kpi .v{
+  margin-top:4px;
   font-size:18px;
   font-weight:900;
-  margin-top:4px;
-  color:#fff;
 }
-.hr{
-  height:1px;
-  background:var(--line);
-  margin:14px 0;
-}
-
-table{
-  width:100%;
-  border-collapse:collapse;
-  font-size:12px;
-}
-th,td{
-  border-bottom:1px solid var(--line);
-  padding:9px 7px;
-  vertical-align:top;
-  text-align:left;
-}
-th{
-  color:var(--muted);
-  font-weight:800;
-}
-
-.tableWrap{
-  overflow:auto;
-  border:1px solid var(--line);
-  border-radius:14px;
-  margin-top:10px;
-}
-
 .noteBox{
   padding:12px;
+  margin-top:12px;
   border-radius:14px;
   border:1px solid var(--line);
-  background:rgba(12,20,40,.85);
+  background:var(--chip);
 }
-
-footer{
-  text-align:center;
-  color:var(--muted);
+.themeBtn{
+  padding:8px 12px;
+  border-radius:999px;
+  border:1px solid var(--line);
+  background:var(--chip);
+  color:var(--text);
+  cursor:pointer;
   font-size:12px;
-  padding:10px 12px 24px;
+  font-weight:700;
 }
-
-.hidden{display:none !important}
-
+.themeBtn.active{
+  outline:2px solid color-mix(in srgb, var(--accent) 55%, white);
+}
+.themePreview{
+  width:12px;
+  height:12px;
+  border-radius:50%;
+  display:inline-block;
+  margin-right:6px;
+  vertical-align:-1px;
+}
+.footer{
+  text-align:center;
+  font-size:12px;
+  color:var(--muted);
+  padding:8px 12px 22px;
+}
+.moodGrid{
+  display:grid;
+  grid-template-columns:repeat(5,1fr);
+  gap:8px;
+}
+@media (max-width:650px){
+  .moodGrid{grid-template-columns:repeat(2,1fr)}
+}
+.moodBtn{
+  border:1px solid var(--line);
+  background:var(--chip);
+  color:var(--text);
+  border-radius:14px;
+  padding:10px 8px;
+  cursor:pointer;
+  text-align:center;
+  font-size:13px;
+}
+.moodBtn.active{
+  background:var(--chip-on);
+  border-color:color-mix(in srgb, var(--accent) 55%, white);
+}
+.moodBtn .emoji{
+  display:block;
+  font-size:22px;
+  margin-bottom:4px;
+}
 input[type="file"]{
   padding:8px;
-  background:#0f172a;
-}
-
-.empty{
-  padding:16px;
-  color:var(--muted);
-  font-size:12px;
 }
 </style>
 </head>
-<body>
-
+<body class="theme-orquidea">
 <header>
-  <div class="wrap topbar">
-    <div class="brand">
-      <h1>Registro emocional personal</h1>
-      <div class="sub">Privado · útil para adolescentes y adultos · se guarda en este dispositivo</div>
+  <div class="wrap">
+    <div class="topbar">
+      <div class="brand">
+        <h1>Brújula Emocional</h1>
+        <div class="sub">Registro personal de emociones y bienestar · privado · útil para adolescentes y adultos</div>
+      </div>
+      <div class="badges">
+        <span class="pill" id="todayPill">Hoy: —</span>
+        <span class="pill" id="weekPill">Semana: —</span>
+        <span class="pill" id="countPill">Total: —</span>
+      </div>
     </div>
-    <div class="badges">
-      <span class="pill" id="todayPill">Hoy: —</span>
-      <span class="pill" id="weekPill">Semana: —</span>
-      <span class="pill" id="countPill">Total: —</span>
+
+    <div class="themeBar" style="margin-top:10px">
+      <button class="themeBtn active" data-theme="orquidea"><span class="themePreview" style="background:#8b5cf6"></span>Orquídea</button>
+      <button class="themeBtn" data-theme="cielo"><span class="themePreview" style="background:#38bdf8"></span>Cielo</button>
+      <button class="themeBtn" data-theme="bosque"><span class="themePreview" style="background:#22c55e"></span>Bosque</button>
+      <button class="themeBtn" data-theme="aurora"><span class="themePreview" style="background:#ec4899"></span>Aurora</button>
+      <button class="themeBtn" data-theme="claro"><span class="themePreview" style="background:#d8b4fe"></span>Claro</button>
     </div>
   </div>
 </header>
@@ -332,11 +429,19 @@ input[type="file"]{
 <main>
   <div class="grid">
 
-    <!-- IZQUIERDA -->
     <section>
       <div class="card">
-        <h2>Registro rápido</h2>
-        <div class="small">Completa solo lo que necesites. La idea no es hacerlo perfecto, sino útil.</div>
+        <h2>Registro emocional</h2>
+        <div class="small">Escribe solo lo necesario. La meta es conocerte mejor, no hacerlo perfecto.</div>
+
+        <label>¿Cómo te sientes hoy?</label>
+        <div class="moodGrid" id="moodGrid">
+          <button class="moodBtn active" data-mood="calma"><span class="emoji">😌</span>Calma</button>
+          <button class="moodBtn" data-mood="alegria"><span class="emoji">🙂</span>Alegría</button>
+          <button class="moodBtn" data-mood="estres"><span class="emoji">😵</span>Estrés</button>
+          <button class="moodBtn" data-mood="tristeza"><span class="emoji">😢</span>Tristeza</button>
+          <button class="moodBtn" data-mood="enojo"><span class="emoji">😠</span>Enojo</button>
+        </div>
 
         <div class="row">
           <div class="col">
@@ -351,7 +456,7 @@ input[type="file"]{
 
         <div class="row">
           <div class="col">
-            <label>Etapa de vida / perfil</label>
+            <label>Perfil</label>
             <select id="profile">
               <option value="adolescente">Adolescente</option>
               <option value="adulto" selected>Adulto</option>
@@ -359,7 +464,7 @@ input[type="file"]{
             </select>
           </div>
           <div class="col">
-            <label>Área de la situación</label>
+            <label>Área</label>
             <select id="area">
               <option value="escuela">Escuela</option>
               <option value="trabajo">Trabajo</option>
@@ -375,20 +480,20 @@ input[type="file"]{
           </div>
         </div>
 
-        <label>¿Qué emoción predominó?</label>
+        <label>Emoción principal</label>
         <select id="emotion">
+          <option value="calma">Calma</option>
+          <option value="alegria">Alegría</option>
           <option value="ansiedad">Ansiedad</option>
           <option value="tristeza">Tristeza</option>
           <option value="enojo">Enojo</option>
           <option value="miedo">Miedo</option>
+          <option value="estres">Estrés</option>
           <option value="frustracion">Frustración</option>
           <option value="culpa">Culpa</option>
           <option value="verguenza">Vergüenza</option>
           <option value="soledad">Soledad</option>
           <option value="confusion">Confusión</option>
-          <option value="estres">Estrés</option>
-          <option value="alegria">Alegría</option>
-          <option value="calma">Calma</option>
           <option value="esperanza">Esperanza</option>
           <option value="otro">Otra</option>
         </select>
@@ -399,18 +504,18 @@ input[type="file"]{
             <input type="number" id="intensity" min="0" max="10" value="5">
           </div>
           <div class="col">
-            <label>Nivel de energía (0–10)</label>
+            <label>Energía (0–10)</label>
             <input type="number" id="energy" min="0" max="10" value="5">
           </div>
         </div>
 
-        <label>¿Qué pasó o qué detonó esto?</label>
-        <textarea id="trigger" placeholder="Ej. Tuve un desacuerdo, me sentí ignorada/o, tuve mucha carga de trabajo, me preocupó algo..."></textarea>
+        <label>¿Qué pasó?</label>
+        <textarea id="trigger" placeholder="Ej. Tuve una discusión, me sentí ignorada/o, tuve mucha carga, me preocupó algo..."></textarea>
 
-        <label>¿Qué pensé en ese momento?</label>
-        <textarea id="thoughts" placeholder="Ej. No voy a poder, nadie me entiende, hice algo mal, necesito calmarme..."></textarea>
+        <label>¿Qué pensaste?</label>
+        <textarea id="thoughts" placeholder="Ej. No voy a poder, necesito una pausa, estoy cansada/o, quiero sentirme mejor..."></textarea>
 
-        <label>¿Qué noté en mi cuerpo? (elige las que quieras)</label>
+        <label>¿Qué notaste en tu cuerpo?</label>
         <div class="chips" id="bodyChips">
           <div class="chip" data-key="pecho">Pecho apretado</div>
           <div class="chip" data-key="estomago">Nudo en el estómago</div>
@@ -423,37 +528,23 @@ input[type="file"]{
           <div class="chip" data-key="normal">Sin cambios claros</div>
         </div>
 
-        <label>Impulso o reacción que apareció</label>
-        <select id="urge">
-          <option value="evitar">Evitar / aislarme</option>
-          <option value="llorar">Llorar</option>
-          <option value="discutir">Discutir / reclamar</option>
-          <option value="revisar">Revisar mensajes o redes</option>
-          <option value="comer">Comer por emoción</option>
-          <option value="dejar">Dejar pendientes</option>
-          <option value="pedir_ayuda">Buscar apoyo</option>
-          <option value="descansar">Necesidad de parar</option>
-          <option value="rumiar">Pensar demasiado</option>
-          <option value="otro">Otro</option>
-        </select>
-
-        <label>¿Qué hice para cuidarme o regularme? (elige 1 o más)</label>
+        <label>¿Qué hiciste para cuidarte?</label>
         <div class="chips" id="careChips">
           <div class="chip" data-key="respirar">Respiré profundo</div>
           <div class="chip" data-key="agua">Tomé agua</div>
           <div class="chip" data-key="caminar">Caminé / me moví</div>
-          <div class="chip" data-key="escribir">Escribí lo que sentía</div>
+          <div class="chip" data-key="escribir">Escribí</div>
           <div class="chip" data-key="musica">Escuché música</div>
-          <div class="chip" data-key="descanso">Descansé un momento</div>
+          <div class="chip" data-key="descanso">Descansé</div>
           <div class="chip" data-key="hablar">Hablé con alguien</div>
           <div class="chip" data-key="orar">Oré / medité</div>
           <div class="chip" data-key="rutina">Seguí con mi rutina</div>
-          <div class="chip" data-key="pausa">Hice una pausa antes de reaccionar</div>
+          <div class="chip" data-key="pausa">Hice una pausa</div>
         </div>
 
         <div class="row">
           <div class="col">
-            <label>¿Eso me ayudó?</label>
+            <label>¿Eso ayudó?</label>
             <select id="helped">
               <option value="si">Sí</option>
               <option value="masomenos">Más o menos</option>
@@ -461,7 +552,7 @@ input[type="file"]{
             </select>
           </div>
           <div class="col">
-            <label>¿Necesito apoyo adicional?</label>
+            <label>¿Necesitas apoyo adicional?</label>
             <select id="support">
               <option value="no">No por ahora</option>
               <option value="si_pronto">Sí, pronto</option>
@@ -470,25 +561,23 @@ input[type="file"]{
           </div>
         </div>
 
-        <label>Nota final o recordatorio amable</label>
-        <textarea id="note" placeholder="Ej. No estuvo fácil, pero sí me cuidé. / Mañana puedo intentar dormir más temprano."></textarea>
+        <label>Nota final</label>
+        <textarea id="note" placeholder="Ej. Hoy no fue sencillo, pero sí me cuidé un poco."></textarea>
 
         <div class="row" style="margin-top:12px">
           <button class="btn main" id="saveBtn">Guardar registro</button>
-          <button class="btn sec" id="quickBtn">Guardar versión breve</button>
-          <button class="btn warn" id="clearFormBtn">Limpiar formulario</button>
+          <button class="btn sec" id="quickBtn">Guardar breve</button>
+          <button class="btn warn" id="clearBtn">Limpiar</button>
         </div>
 
         <div class="row" style="margin-top:10px">
-          <span class="tag">Consejo: nombra la emoción antes de intentar cambiarla</span>
+          <span class="tag">Tip: primero nombra la emoción, luego decide qué hacer con ella</span>
           <span class="small" id="saveMsg"></span>
         </div>
       </div>
 
       <div class="card">
         <h2>Registros de hoy</h2>
-        <div class="small">Vista rápida de lo que has sentido y qué te ayudó.</div>
-
         <div class="tableWrap">
           <table>
             <thead>
@@ -497,7 +586,7 @@ input[type="file"]{
                 <th>Área</th>
                 <th>Emoción</th>
                 <th>Int.</th>
-                <th>Ayuda</th>
+                <th>Ayudó</th>
                 <th>Apoyo</th>
               </tr>
             </thead>
@@ -510,8 +599,6 @@ input[type="file"]{
 
       <div class="card">
         <h2>Historial reciente</h2>
-        <div class="small">Últimos 20 registros guardados en este dispositivo.</div>
-
         <div class="tableWrap">
           <table>
             <thead>
@@ -522,7 +609,7 @@ input[type="file"]{
                 <th>Emoción</th>
                 <th>Int.</th>
                 <th>Nota</th>
-                <th>Acción</th>
+                <th>Eliminar</th>
               </tr>
             </thead>
             <tbody id="historyTable">
@@ -533,12 +620,11 @@ input[type="file"]{
       </div>
     </section>
 
-    <!-- DERECHA -->
     <aside>
       <div class="card">
         <h2>Frase para acompañarte</h2>
         <div id="quote" style="font-size:16px;font-weight:900;line-height:1.5">“Puedo sentir esto sin juzgarme.”</div>
-        <div class="small" style="margin-top:8px">Úsala como ancla durante uno o dos minutos.</div>
+        <div class="small" style="margin-top:8px">Úsala como una pausa breve.</div>
         <div class="row" style="margin-top:12px">
           <button class="btn sec" id="newQuoteBtn">Otra frase ✨</button>
         </div>
@@ -546,19 +632,17 @@ input[type="file"]{
 
       <div class="card">
         <h2>Resumen semanal</h2>
-        <div class="small">Te ayuda a notar patrones, no a criticarte.</div>
-
         <div class="kpis">
           <div class="kpi">
             <div class="small">Registros</div>
             <div class="v" id="wkCount">—</div>
           </div>
           <div class="kpi">
-            <div class="small">Intensidad promedio</div>
+            <div class="small">Promedio</div>
             <div class="v" id="wkAvg">—</div>
           </div>
           <div class="kpi">
-            <div class="small">Veces que ayudó</div>
+            <div class="small">Ayudó</div>
             <div class="v" id="wkHelped">—</div>
           </div>
         </div>
@@ -571,26 +655,22 @@ input[type="file"]{
                 <th>Reg.</th>
                 <th>Prom.</th>
                 <th>Emoción más frecuente</th>
-                <th>Área más frecuente</th>
               </tr>
             </thead>
             <tbody id="weekTable">
-              <tr><td colspan="5" class="empty">Aún no hay datos semanales.</td></tr>
+              <tr><td colspan="4" class="empty">Aún no hay datos semanales.</td></tr>
             </tbody>
           </table>
         </div>
 
-        <div class="hr"></div>
         <div class="noteBox">
-          <div class="small" id="insightBox">Tu lectura aparecerá aquí cuando haya suficientes registros.</div>
+          <div class="small" id="insightBox">Tu lectura semanal aparecerá aquí cuando guardes registros.</div>
         </div>
       </div>
 
       <div class="card">
-        <h2>Respaldo de tus datos</h2>
-        <div class="small">Puedes exportar tus registros para guardarlos o importarlos después en este mismo formato.</div>
-
-        <div class="row" style="margin-top:12px">
+        <h2>Respaldo</h2>
+        <div class="row">
           <button class="btn good" id="exportBtn">Exportar JSON</button>
           <button class="btn bad" id="deleteAllBtn">Borrar todo</button>
         </div>
@@ -601,10 +681,10 @@ input[type="file"]{
       </div>
 
       <div class="card">
-        <h2>Recordatorio importante</h2>
+        <h2>Importante</h2>
         <div class="small" style="line-height:1.6">
-          Este registro puede ayudar a observar emociones y hábitos de autocuidado, pero no sustituye apoyo profesional.
-          Si sientes que estás sobrepasada/o, busca a una persona de confianza o apoyo especializado.
+          Esta herramienta ayuda a observar emociones, patrones y estrategias de cuidado.
+          No sustituye apoyo profesional. Si sientes que hoy necesitas ayuda real, busca a alguien de confianza o atención especializada.
         </div>
       </div>
     </aside>
@@ -612,23 +692,23 @@ input[type="file"]{
   </div>
 </main>
 
-<footer>
-  Registro emocional personal · Hecho para uso privado en este dispositivo
-</footer>
+<div class="footer">
+  Brújula Emocional · guardado local en este dispositivo
+</div>
 
 <script>
 (() => {
-  const KEY = "registro_emocional_general_v2";
+  const DATA_KEY = "brujula_emocional_v1";
+  const THEME_KEY = "brujula_emocional_theme";
 
   const quotes = [
     "Puedo sentir esto sin juzgarme.",
-    "Lo que siento importa, aunque no lo entienda del todo todavía.",
     "No necesito resolver todo en este momento.",
     "Nombrar lo que siento ya es una forma de cuidarme.",
     "Una emoción intensa no dura para siempre.",
     "Puedo pausar antes de reaccionar.",
     "Hoy no necesito ser perfecta/o, solo honesta/o conmigo.",
-    "Descansar también es una decisión valiosa.",
+    "Descansar también es valioso.",
     "Pedir ayuda también es fortaleza.",
     "Puedo acompañarme con más amabilidad.",
     "No todo pensamiento es una verdad.",
@@ -650,39 +730,33 @@ input[type="file"]{
     energy: $("energy"),
     trigger: $("trigger"),
     thoughts: $("thoughts"),
-    urge: $("urge"),
     helped: $("helped"),
     support: $("support"),
     note: $("note"),
-
-    bodyChips: [...document.querySelectorAll("#bodyChips .chip")],
-    careChips: [...document.querySelectorAll("#careChips .chip")],
-
     saveBtn: $("saveBtn"),
     quickBtn: $("quickBtn"),
-    clearFormBtn: $("clearFormBtn"),
+    clearBtn: $("clearBtn"),
     saveMsg: $("saveMsg"),
-
     todayPill: $("todayPill"),
     weekPill: $("weekPill"),
     countPill: $("countPill"),
-
     todayTable: $("todayTable"),
     historyTable: $("historyTable"),
-
     quote: $("quote"),
     newQuoteBtn: $("newQuoteBtn"),
-
     wkCount: $("wkCount"),
     wkAvg: $("wkAvg"),
     wkHelped: $("wkHelped"),
     weekTable: $("weekTable"),
     insightBox: $("insightBox"),
-
     exportBtn: $("exportBtn"),
     deleteAllBtn: $("deleteAllBtn"),
     importFile: $("importFile"),
-    importMsg: $("importMsg")
+    importMsg: $("importMsg"),
+    moodBtns: [...document.querySelectorAll(".moodBtn")],
+    bodyChips: [...document.querySelectorAll("#bodyChips .chip")],
+    careChips: [...document.querySelectorAll("#careChips .chip")],
+    themeBtns: [...document.querySelectorAll(".themeBtn")]
   };
 
   function todayISO(d = new Date()){
@@ -694,22 +768,7 @@ input[type="file"]{
 
   function nowTime(){
     const d = new Date();
-    const hh = String(d.getHours()).padStart(2,"0");
-    const mm = String(d.getMinutes()).padStart(2,"0");
-    return `${hh}:${mm}`;
-  }
-
-  function loadData(){
-    try{
-      const raw = JSON.parse(localStorage.getItem(KEY) || "[]");
-      return Array.isArray(raw) ? raw : [];
-    }catch{
-      return [];
-    }
-  }
-
-  function saveData(data){
-    localStorage.setItem(KEY, JSON.stringify(data));
+    return `${String(d.getHours()).padStart(2,"0")}:${String(d.getMinutes()).padStart(2,"0")}`;
   }
 
   function clamp010(n){
@@ -723,21 +782,44 @@ input[type="file"]{
     return list.reduce((a,b)=>a+b,0) / list.length;
   }
 
+  function loadData(){
+    try{
+      const parsed = JSON.parse(localStorage.getItem(DATA_KEY) || "[]");
+      return Array.isArray(parsed) ? parsed : [];
+    }catch{
+      return [];
+    }
+  }
+
+  function saveData(data){
+    localStorage.setItem(DATA_KEY, JSON.stringify(data));
+  }
+
+  function escapeHtml(str){
+    return String(str || "")
+      .replaceAll("&","&amp;")
+      .replaceAll("<","&lt;")
+      .replaceAll(">","&gt;")
+      .replaceAll('"',"&quot;")
+      .replaceAll("'","&#39;");
+  }
+
+  function selectedKeys(list){
+    return list.filter(x => x.dataset.on === "1").map(x => x.dataset.key);
+  }
+
+  function resetChips(list){
+    list.forEach(x => x.dataset.on = "0");
+  }
+
   function showMsg(text, ms = 1600){
     ui.saveMsg.textContent = text;
     setTimeout(() => ui.saveMsg.textContent = "", ms);
   }
 
-  function toggleChip(chip){
-    chip.dataset.on = chip.dataset.on === "1" ? "0" : "1";
-  }
-
-  function selectedChips(chips){
-    return chips.filter(c => c.dataset.on === "1").map(c => c.dataset.key);
-  }
-
-  function resetChips(chips){
-    chips.forEach(c => c.dataset.on = "0");
+  function getSelectedMood(){
+    const active = ui.moodBtns.find(b => b.classList.contains("active"));
+    return active ? active.dataset.mood : "calma";
   }
 
   function lastNDaysISO(n){
@@ -753,20 +835,49 @@ input[type="file"]{
 
   function mostFrequent(arr){
     if(!arr.length) return "—";
-    const count = {};
-    for(const item of arr){
-      count[item] = (count[item] || 0) + 1;
-    }
-    return Object.entries(count).sort((a,b)=>b[1]-a[1])[0][0];
+    const map = {};
+    arr.forEach(v => map[v] = (map[v] || 0) + 1);
+    return Object.entries(map).sort((a,b)=>b[1]-a[1])[0][0];
   }
 
-  function escapeHtml(str){
-    return String(str || "")
-      .replaceAll("&","&amp;")
-      .replaceAll("<","&lt;")
-      .replaceAll(">","&gt;")
-      .replaceAll('"',"&quot;")
-      .replaceAll("'","&#39;");
+  function setTheme(theme){
+    document.body.className = `theme-${theme}`;
+    localStorage.setItem(THEME_KEY, theme);
+    ui.themeBtns.forEach(btn => btn.classList.toggle("active", btn.dataset.theme === theme));
+    const accent = getComputedStyle(document.body).getPropertyValue("--accent").trim() || "#7c3aed";
+    const meta = document.querySelector('meta[name="theme-color"]');
+    if(meta) meta.setAttribute("content", accent);
+  }
+
+  function initTheme(){
+    const saved = localStorage.getItem(THEME_KEY) || "orquidea";
+    setTheme(saved);
+    ui.themeBtns.forEach(btn => {
+      btn.addEventListener("click", () => setTheme(btn.dataset.theme));
+    });
+  }
+
+  function initMoodButtons(){
+    ui.moodBtns.forEach(btn => {
+      btn.addEventListener("click", () => {
+        ui.moodBtns.forEach(b => b.classList.remove("active"));
+        btn.classList.add("active");
+        ui.emotion.value = btn.dataset.mood;
+      });
+    });
+  }
+
+  function syncMoodFromEmotion(){
+    const mood = ui.emotion.value;
+    let found = false;
+    ui.moodBtns.forEach(btn => {
+      const on = btn.dataset.mood === mood;
+      btn.classList.toggle("active", on);
+      if(on) found = true;
+    });
+    if(!found){
+      ui.moodBtns.forEach(btn => btn.classList.remove("active"));
+    }
   }
 
   function addEntry(entry){
@@ -776,70 +887,54 @@ input[type="file"]{
     renderAll();
   }
 
-  function clearForm(keepDate = true){
-    const oldDate = ui.date.value;
+  function makeEntry(quick = false){
+    return {
+      id: crypto.randomUUID ? crypto.randomUUID() : String(Date.now() + Math.random()),
+      createdAt: new Date().toISOString(),
+      date: ui.date.value || todayISO(),
+      time: quick ? nowTime() : (ui.time.value || nowTime()),
+      profile: ui.profile.value,
+      area: ui.area.value,
+      emotion: quick ? getSelectedMood() : ui.emotion.value,
+      intensity: clamp010(ui.intensity.value),
+      energy: clamp010(ui.energy.value),
+      trigger: quick ? "" : ui.trigger.value.trim(),
+      thoughts: quick ? "" : ui.thoughts.value.trim(),
+      body: quick ? [] : selectedKeys(ui.bodyChips),
+      care: quick ? ["pausa"] : selectedKeys(ui.careChips),
+      helped: ui.helped.value,
+      support: ui.support.value,
+      note: quick ? "Registro breve guardado." : ui.note.value.trim()
+    };
+  }
+
+  function clearForm(){
+    ui.date.value = todayISO();
     ui.time.value = nowTime();
     ui.profile.value = "adulto";
     ui.area.value = "escuela";
-    ui.emotion.value = "ansiedad";
+    ui.emotion.value = "calma";
     ui.intensity.value = 5;
     ui.energy.value = 5;
     ui.trigger.value = "";
     ui.thoughts.value = "";
-    ui.urge.value = "evitar";
     ui.helped.value = "si";
     ui.support.value = "no";
     ui.note.value = "";
     resetChips(ui.bodyChips);
     resetChips(ui.careChips);
-    if(keepDate) ui.date.value = oldDate || todayISO();
+    ui.moodBtns.forEach(btn => btn.classList.remove("active"));
+    const calmBtn = ui.moodBtns.find(btn => btn.dataset.mood === "calma");
+    if(calmBtn) calmBtn.classList.add("active");
   }
 
-  function makeQuickEntry(){
-    return {
-      id: crypto.randomUUID ? crypto.randomUUID() : String(Date.now()),
-      createdAt: new Date().toISOString(),
-      date: ui.date.value || todayISO(),
-      time: nowTime(),
-      profile: ui.profile.value || "adulto",
-      area: ui.area.value || "personal",
-      emotion: ui.emotion.value || "ansiedad",
-      intensity: clamp010(ui.intensity.value),
-      energy: clamp010(ui.energy.value),
-      trigger: "",
-      thoughts: "",
-      body: [],
-      urge: "pausa",
-      care: ["respirar","rutina"],
-      helped: "masomenos",
-      support: "no",
-      note: "Registro breve guardado."
-    };
+  function deleteEntry(id){
+    const data = loadData().filter(item => item.id !== id);
+    saveData(data);
+    renderAll();
   }
 
-  function makeFullEntry(){
-    return {
-      id: crypto.randomUUID ? crypto.randomUUID() : String(Date.now()),
-      createdAt: new Date().toISOString(),
-      date: ui.date.value || todayISO(),
-      time: ui.time.value || nowTime(),
-      profile: ui.profile.value,
-      area: ui.area.value,
-      emotion: ui.emotion.value,
-      intensity: clamp010(ui.intensity.value),
-      energy: clamp010(ui.energy.value),
-      trigger: ui.trigger.value.trim(),
-      thoughts: ui.thoughts.value.trim(),
-      body: selectedChips(ui.bodyChips),
-      urge: ui.urge.value,
-      care: selectedChips(ui.careChips),
-      helped: ui.helped.value,
-      support: ui.support.value,
-      note: ui.note.value.trim()
-    };
-  }
-
-  function renderHeaderInfo(data){
+  function renderHeader(data){
     const today = todayISO();
     ui.todayPill.textContent = `Hoy: ${today}`;
     const days = lastNDaysISO(7);
@@ -888,7 +983,6 @@ input[type="file"]{
 
     rows.forEach(e => {
       const note = e.note || e.trigger || e.thoughts || "—";
-      const care = (e.care && e.care.length) ? e.care.join(", ") : "—";
       ui.historyTable.innerHTML += `
         <tr>
           <td>${escapeHtml(e.date || "—")}</td>
@@ -897,9 +991,13 @@ input[type="file"]{
           <td>${escapeHtml(e.emotion || "—")}</td>
           <td>${escapeHtml(e.intensity ?? "—")}</td>
           <td>${escapeHtml(note)}</td>
-          <td>${escapeHtml(care)}</td>
+          <td><button class="btn sec" data-del="${escapeHtml(e.id)}" style="padding:6px 10px;font-size:12px">Eliminar</button></td>
         </tr>
       `;
+    });
+
+    [...document.querySelectorAll("[data-del]")].forEach(btn => {
+      btn.addEventListener("click", () => deleteEntry(btn.dataset.del));
     });
   }
 
@@ -907,53 +1005,51 @@ input[type="file"]{
     const days = lastNDaysISO(7);
     let weekCount = 0;
     let helpedCount = 0;
-    const intensityAll = [];
+    const allIntensity = [];
 
     ui.weekTable.innerHTML = "";
-    let hasRows = false;
+    let any = false;
 
     days.forEach(date => {
       const entries = data.filter(e => e.date === date);
       if(!entries.length) return;
-      hasRows = true;
+      any = true;
 
       weekCount += entries.length;
       helpedCount += entries.filter(e => e.helped === "si").length;
-      intensityAll.push(...entries.map(e => Number(e.intensity)).filter(Number.isFinite));
+      allIntensity.push(...entries.map(e => Number(e.intensity)).filter(Number.isFinite));
 
-      const avgIntensity = avg(entries.map(e => Number(e.intensity)).filter(Number.isFinite));
-      const emotionTop = mostFrequent(entries.map(e => e.emotion).filter(Boolean));
-      const areaTop = mostFrequent(entries.map(e => e.area).filter(Boolean));
+      const dayAvg = avg(entries.map(e => Number(e.intensity)).filter(Number.isFinite));
+      const topEmotion = mostFrequent(entries.map(e => e.emotion).filter(Boolean));
 
       ui.weekTable.innerHTML += `
         <tr>
           <td>${escapeHtml(date)}</td>
           <td>${entries.length}</td>
-          <td>${avgIntensity == null ? "—" : avgIntensity.toFixed(1)}</td>
-          <td>${escapeHtml(emotionTop)}</td>
-          <td>${escapeHtml(areaTop)}</td>
+          <td>${dayAvg == null ? "—" : dayAvg.toFixed(1)}</td>
+          <td>${escapeHtml(topEmotion)}</td>
         </tr>
       `;
     });
 
-    if(!hasRows){
-      ui.weekTable.innerHTML = `<tr><td colspan="5" class="empty">Aún no hay datos semanales.</td></tr>`;
+    if(!any){
+      ui.weekTable.innerHTML = `<tr><td colspan="4" class="empty">Aún no hay datos semanales.</td></tr>`;
     }
 
-    const weekAvg = avg(intensityAll);
-    ui.wkCount.textContent = String(weekCount || 0);
+    const weekAvg = avg(allIntensity);
+    ui.wkCount.textContent = weekCount || 0;
     ui.wkAvg.textContent = weekAvg == null ? "—" : weekAvg.toFixed(1);
-    ui.wkHelped.textContent = String(helpedCount || 0);
+    ui.wkHelped.textContent = helpedCount || 0;
 
     renderInsight(data, weekCount, weekAvg, helpedCount);
   }
 
   function renderInsight(data, weekCount, weekAvg, helpedCount){
-    const last7 = lastNDaysISO(7);
-    const recent = data.filter(e => last7.includes(e.date));
+    const range = lastNDaysISO(7);
+    const recent = data.filter(e => range.includes(e.date));
 
     if(!recent.length){
-      ui.insightBox.textContent = "Tu lectura aparecerá aquí cuando haya suficientes registros.";
+      ui.insightBox.textContent = "Tu lectura semanal aparecerá aquí cuando guardes registros.";
       return;
     }
 
@@ -962,35 +1058,35 @@ input[type="file"]{
     const topCare = mostFrequent(recent.flatMap(e => Array.isArray(e.care) ? e.care : []));
     const supportNeed = recent.filter(e => e.support === "si_hoy" || e.support === "si_pronto").length;
 
-    let msg = `En los últimos 7 días registraste ${weekCount} momento(s). `;
-    msg += `La emoción más frecuente fue "${topEmotion}" y el área más repetida fue "${topArea}". `;
+    let text = `En los últimos 7 días registraste ${weekCount} momento(s). `;
+    text += `La emoción más frecuente fue "${topEmotion}" y el área más repetida fue "${topArea}". `;
 
     if(topCare !== "—"){
-      msg += `La estrategia de cuidado que más aparece es "${topCare}". `;
+      text += `La estrategia de cuidado más usada fue "${topCare}". `;
     }
 
     if(weekAvg != null){
       if(weekAvg >= 7){
-        msg += `La intensidad promedio fue alta (${weekAvg.toFixed(1)}), así que conviene priorizar descanso, apoyo y pausas más claras. `;
+        text += `La intensidad promedio fue alta (${weekAvg.toFixed(1)}), así que conviene priorizar descanso, apoyo y pausas más claras. `;
       } else if(weekAvg >= 4){
-        msg += `La intensidad promedio fue media (${weekAvg.toFixed(1)}), lo que sugiere que hay malestar, pero también oportunidad de regularlo con constancia. `;
+        text += `La intensidad promedio fue media (${weekAvg.toFixed(1)}), lo cual sugiere malestar manejable si mantienes constancia. `;
       } else {
-        msg += `La intensidad promedio fue baja (${weekAvg.toFixed(1)}), lo cual puede indicar mayor estabilidad esta semana. `;
+        text += `La intensidad promedio fue baja (${weekAvg.toFixed(1)}), señal de una semana más estable. `;
       }
     }
 
     if(supportNeed > 0){
-      msg += `Marcaste necesidad de apoyo adicional ${supportNeed} vez/veces. Tómalo en serio.`;
+      text += `Marcaste necesidad de apoyo adicional ${supportNeed} vez/veces. Tómalo en serio.`;
     } else if(helpedCount > 0){
-      msg += `También es valioso que registraste momentos en los que algo sí te ayudó.`;
+      text += `También hubo momentos en los que tus estrategias sí ayudaron.`;
     }
 
-    ui.insightBox.textContent = msg;
+    ui.insightBox.textContent = text;
   }
 
   function renderAll(){
     const data = loadData();
-    renderHeaderInfo(data);
+    renderHeader(data);
     renderToday(data);
     renderHistory(data);
     renderWeek(data);
@@ -1002,7 +1098,7 @@ input[type="file"]{
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
     a.href = url;
-    a.download = `registro-emocional-${todayISO()}.json`;
+    a.download = `brujula-emocional-${todayISO()}.json`;
     a.click();
     URL.revokeObjectURL(url);
   }
@@ -1027,43 +1123,46 @@ input[type="file"]{
   function init(){
     ui.date.value = todayISO();
     ui.time.value = nowTime();
+    ui.quote.textContent = `“${quotes[Math.floor(Math.random()*quotes.length)]}”`;
+
+    initTheme();
+    initMoodButtons();
+
+    ui.emotion.addEventListener("change", syncMoodFromEmotion);
 
     [...ui.bodyChips, ...ui.careChips].forEach(ch => {
       ch.dataset.on = "0";
-      ch.addEventListener("click", () => toggleChip(ch));
-    });
-
-    ui.quote.textContent = `“${quotes[Math.floor(Math.random() * quotes.length)]}”`;
-
-    ui.newQuoteBtn.addEventListener("click", () => {
-      ui.quote.textContent = `“${quotes[Math.floor(Math.random() * quotes.length)]}”`;
+      ch.addEventListener("click", () => {
+        ch.dataset.on = ch.dataset.on === "1" ? "0" : "1";
+      });
     });
 
     ui.saveBtn.addEventListener("click", () => {
-      const entry = makeFullEntry();
-      addEntry(entry);
-      clearForm(true);
+      addEntry(makeEntry(false));
+      clearForm();
       showMsg("Registro guardado ✓");
     });
 
     ui.quickBtn.addEventListener("click", () => {
-      const entry = makeQuickEntry();
-      addEntry(entry);
-      clearForm(true);
-      showMsg("Versión breve guardada ✓");
+      addEntry(makeEntry(true));
+      clearForm();
+      showMsg("Registro breve guardado ✓");
     });
 
-    ui.clearFormBtn.addEventListener("click", () => {
-      clearForm(true);
+    ui.clearBtn.addEventListener("click", () => {
+      clearForm();
       showMsg("Formulario limpio");
+    });
+
+    ui.newQuoteBtn.addEventListener("click", () => {
+      ui.quote.textContent = `“${quotes[Math.floor(Math.random()*quotes.length)]}”`;
     });
 
     ui.exportBtn.addEventListener("click", exportJSON);
 
     ui.deleteAllBtn.addEventListener("click", () => {
-      const ok = confirm("¿Seguro que quieres borrar todos los registros guardados en este dispositivo?");
-      if(!ok) return;
-      localStorage.removeItem(KEY);
+      if(!confirm("¿Seguro que quieres borrar todos los registros guardados en este dispositivo?")) return;
+      localStorage.removeItem(DATA_KEY);
       renderAll();
       ui.importMsg.textContent = "";
       showMsg("Datos borrados");
