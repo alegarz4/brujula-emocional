@@ -6,10 +6,12 @@
 <title>Brújula Emocional</title>
 <link rel="manifest" href="manifest.webmanifest">
 <meta name="theme-color" content="#7c3aed">
+<meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta name="apple-mobile-web-app-title" content="Brújula Emocional">
 <link rel="apple-touch-icon" href="icons/icon-192.png">
+<link rel="icon" href="icon.svg" type="image/svg+xml">
 
 <style>
 :root{
@@ -158,6 +160,7 @@ main{max-width:1240px;margin:18px auto;padding:0 12px 28px}
 }
 .miniStat .v{font-weight:900;font-size:20px;margin-top:4px}
 h2{margin:0 0 10px;font-size:16px}
+h3{margin:0}
 .small{font-size:12px;color:var(--muted)}
 .col{flex:1;min-width:220px}
 label{display:block;margin:10px 0 6px;color:var(--muted);font-size:12px}
@@ -187,6 +190,11 @@ textarea{resize:vertical;min-height:84px}
 .btn.take{background:var(--good);color:#052010}
 .btn.late{background:var(--warn);color:#2a1b05}
 .btn.skip{background:var(--bad);color:#fff}
+.btn.install{
+  background:linear-gradient(135deg,var(--accent),var(--accent-2));
+  color:#fff;
+  width:100%;
+}
 .chips{display:flex;flex-wrap:wrap;gap:8px}
 .chip{
   padding:8px 11px;border-radius:999px;border:1px solid var(--line);
@@ -280,6 +288,17 @@ canvas{
   margin-top:12px;
   background:var(--chip);
 }
+.med-list{
+  margin-top:12px;
+  display:grid;
+  gap:10px;
+}
+.med-row{
+  border:1px solid var(--line);
+  border-radius:14px;
+  padding:12px;
+  background:color-mix(in srgb, var(--panel) 80%, transparent);
+}
 .status-pill{
   display:inline-flex;
   align-items:center;
@@ -292,6 +311,7 @@ canvas{
 .status-ok{background:rgba(34,197,94,.15)}
 .status-warn{background:rgba(245,158,11,.15)}
 .status-bad{background:rgba(244,63,94,.15)}
+.installWrap{margin-top:12px}
 </style>
 </head>
 <body class="theme-noche">
@@ -562,8 +582,11 @@ canvas{
             <textarea id="medNotes" placeholder="Ej. Tomar después de alimentos / no olvidar llevar al trabajo"></textarea>
 
             <div class="row" style="margin-top:12px">
-              <button class="btn main" id="saveMedBtn" type="button">Guardar medicación</button>
+              <button class="btn sec" id="addMedBtn" type="button">Agregar medicamento a la lista</button>
+              <button class="btn main" id="saveMedBtn" type="button">Guardar lista de medicamentos</button>
             </div>
+
+            <div class="med-list" id="medDraftList"></div>
           </div>
         </div>
 
@@ -627,6 +650,17 @@ canvas{
     </section>
 
     <aside>
+      <div class="card">
+        <h2>Instalar app</h2>
+        <div class="small">Si tu navegador lo permite, puedes instalar Brújula Emocional como app en este dispositivo.</div>
+        <div class="installWrap">
+          <button class="btn install" id="installBtn" type="button" style="display:none">Instalar Brújula Emocional</button>
+          <div class="small" id="installMsg" style="margin-top:8px">
+            En iPhone: comparte la página y elige “Agregar a pantalla de inicio”.
+          </div>
+        </div>
+      </div>
+
       <div class="card">
         <h2>Frase para acompañarte</h2>
         <div id="quote" style="font-size:16px;font-weight:900;line-height:1.5">“Puedo sentir esto sin juzgarme.”</div>
@@ -845,16 +879,18 @@ canvas{
 
 <script>
 (() => {
-  const DATA_KEY = "brujula_emocional_v5";
+  const DATA_KEY = "brujula_emocional_v6";
   const THEME_KEY = "brujula_emocional_theme";
   const FIRST_KEY = "brujula_emocional_first_open";
   const REMINDER_ENABLED_KEY = "brujula_emocional_reminder_enabled";
   const REMINDER_TIME_KEY = "brujula_emocional_reminder_time";
   const REMINDER_LAST_KEY = "brujula_emocional_last_reminder";
   const DISCREET_KEY = "brujula_emocional_discreet";
-  const MED_KEY = "brujula_emocional_medication";
-  const MED_LOG_KEY = "brujula_emocional_medication_log";
+  const MED_KEY = "brujula_emocional_medication_multi";
+  const MED_LOG_KEY = "brujula_emocional_medication_log_multi";
   const MED_ALERT_LAST_KEY = "brujula_emocional_medication_alert_last";
+  const OLD_MED_KEY = "brujula_emocional_medication";
+  const OLD_MED_LOG_KEY = "brujula_emocional_medication_log";
 
   const quotesByEmotion = {
     calma: ["Puedo seguir cuidando esta paz.","La calma también merece espacio.","No tengo que estar mal para escucharme."],
@@ -881,6 +917,9 @@ canvas{
     "Puedo pausar antes de reaccionar.",
     "Hoy no necesito ser perfecta/o, solo honesta/o conmigo."
   ];
+
+  let deferredInstallPrompt = null;
+  let medDraftItems = [];
 
   const $ = (id) => document.getElementById(id);
 
@@ -925,11 +964,16 @@ canvas{
     medExtraTimesRow: $("medExtraTimesRow"),
     medThirdWrap: $("medThirdWrap"),
     medNotes: $("medNotes"),
+    addMedBtn: $("addMedBtn"),
     saveMedBtn: $("saveMedBtn"),
     medFormWrap: $("medFormWrap"),
     medTodaySummary: $("medTodaySummary"),
     medDailyCards: $("medDailyCards"),
-    medAlertBadge: $("medAlertBadge")
+    medAlertBadge: $("medAlertBadge"),
+    medDraftList: $("medDraftList"),
+
+    installBtn: $("installBtn"),
+    installMsg: $("installMsg")
   };
 
   function todayISO(d = new Date()){
@@ -962,6 +1006,10 @@ canvas{
     return list.reduce((a,b)=>a+b,0) / list.length;
   }
 
+  function safeId(){
+    return (window.crypto && crypto.randomUUID) ? crypto.randomUUID() : String(Date.now() + Math.random());
+  }
+
   function loadData(){
     try{
       const parsed = JSON.parse(localStorage.getItem(DATA_KEY) || "[]");
@@ -975,17 +1023,86 @@ canvas{
     localStorage.setItem(DATA_KEY, JSON.stringify(data));
   }
 
+  function normalizeMedication(raw){
+    if(!raw) return { enabled:false, items:[] };
+
+    if(Array.isArray(raw.items)){
+      return {
+        enabled: !!raw.enabled && raw.items.length > 0,
+        items: raw.items.map(item => ({
+          id: item.id || safeId(),
+          name: item.name || "",
+          dose: item.dose || "",
+          frequency: Number(item.frequency || (Array.isArray(item.times) ? item.times.length : 1)) || 1,
+          times: Array.isArray(item.times) ? item.times.filter(Boolean) : [],
+          notes: item.notes || ""
+        })).filter(item => item.name && item.dose && item.times.length)
+      };
+    }
+
+    if(raw.name || raw.dose || raw.times){
+      return {
+        enabled: !!raw.enabled,
+        items: [{
+          id: safeId(),
+          name: raw.name || "",
+          dose: raw.dose || "",
+          frequency: Number(raw.frequency || (Array.isArray(raw.times) ? raw.times.length : 1)) || 1,
+          times: Array.isArray(raw.times) ? raw.times.filter(Boolean) : [],
+          notes: raw.notes || ""
+        }].filter(item => item.name && item.dose && item.times.length)
+      };
+    }
+
+    return { enabled:false, items:[] };
+  }
+
+  function migrateOldMedicationIfNeeded(){
+    const existing = localStorage.getItem(MED_KEY);
+    if(existing) return;
+
+    const oldMed = localStorage.getItem(OLD_MED_KEY);
+    const oldLog = localStorage.getItem(OLD_MED_LOG_KEY);
+
+    if(oldMed){
+      try{
+        const parsed = JSON.parse(oldMed);
+        saveMedication(normalizeMedication(parsed));
+      }catch{}
+    }
+
+    if(oldLog){
+      try{
+        const parsedLog = JSON.parse(oldLog);
+        if(parsedLog && typeof parsedLog === "object"){
+          const normalizedLog = {};
+          Object.keys(parsedLog).forEach(date => {
+            normalizedLog[date] = {};
+            const day = parsedLog[date] || {};
+            Object.keys(day).forEach(timeKey => {
+              normalizedLog[date].legacy_single_med = normalizedLog[date].legacy_single_med || {};
+              normalizedLog[date].legacy_single_med[timeKey] = day[timeKey];
+            });
+          });
+          saveMedLog(normalizedLog);
+        }
+      }catch{}
+    }
+  }
+
   function loadMedication(){
     try{
       const parsed = JSON.parse(localStorage.getItem(MED_KEY) || "null");
-      return parsed;
+      return normalizeMedication(parsed);
     }catch{
-      return null;
+      return { enabled:false, items:[] };
     }
   }
 
   function saveMedication(data){
-    localStorage.setItem(MED_KEY, JSON.stringify(data));
+    const normalized = normalizeMedication(data);
+    normalized.enabled = normalized.items.length > 0 ? !!data.enabled : false;
+    localStorage.setItem(MED_KEY, JSON.stringify(normalized));
   }
 
   function loadMedLog(){
@@ -1122,7 +1239,7 @@ canvas{
 
   function makeEntry(quick = false){
     return {
-      id: (window.crypto && crypto.randomUUID) ? crypto.randomUUID() : String(Date.now() + Math.random()),
+      id: safeId(),
       createdAt: new Date().toISOString(),
       date: ui.date.value || todayISO(),
       time: quick ? nowTime() : (ui.time.value || nowTime()),
@@ -1462,35 +1579,105 @@ canvas{
     ui.medThirdWrap.style.display = freq >= 3 ? "block" : "none";
   }
 
+  function clearMedicationInputs(){
+    ui.medName.value = "";
+    ui.medDose.value = "";
+    ui.medFrequency.value = "1";
+    ui.medTime1.value = "";
+    ui.medTime2.value = "";
+    ui.medTime3.value = "";
+    ui.medNotes.value = "";
+    updateMedicationFrequencyUI();
+  }
+
+  function buildMedicationFromInputs(){
+    const frequency = Number(ui.medFrequency.value || 1);
+    const times = [ui.medTime1.value, ui.medTime2.value, ui.medTime3.value]
+      .slice(0, frequency)
+      .filter(Boolean);
+
+    return {
+      id: safeId(),
+      name: ui.medName.value.trim(),
+      dose: ui.medDose.value.trim(),
+      frequency,
+      times,
+      notes: ui.medNotes.value.trim()
+    };
+  }
+
+  function renderMedicationDraft(){
+    ui.medDraftList.innerHTML = "";
+
+    if(!medDraftItems.length){
+      ui.medDraftList.innerHTML = `<div class="small">Aún no has agregado medicamentos a la lista.</div>`;
+      return;
+    }
+
+    medDraftItems.forEach((item) => {
+      ui.medDraftList.innerHTML += `
+        <div class="med-row">
+          <div><strong>${escapeHtml(item.name)}</strong> · ${escapeHtml(item.dose)}</div>
+          <div class="small" style="margin-top:6px">Frecuencia: ${item.frequency} toma(s) al día</div>
+          <div class="small">Horarios: ${escapeHtml(item.times.join(", "))}</div>
+          <div class="small">${escapeHtml(item.notes || "Sin notas.")}</div>
+          <div class="row" style="margin-top:10px">
+            <button class="btn bad" type="button" data-remove-draft="${escapeHtml(item.id)}">Quitar</button>
+          </div>
+        </div>
+      `;
+    });
+
+    [...document.querySelectorAll("[data-remove-draft]")].forEach(btn => {
+      btn.addEventListener("click", () => {
+        medDraftItems = medDraftItems.filter(item => item.id !== btn.dataset.removeDraft);
+        renderMedicationDraft();
+      });
+    });
+  }
+
   function toggleMedicationForm(){
     const enabled = ui.medEnabled.checked;
     ui.medFormWrap.style.display = enabled ? "block" : "none";
 
     if(!enabled){
-      saveMedication({ enabled:false, name:"", dose:"", frequency:1, times:[], notes:"" });
+      medDraftItems = [];
+      renderMedicationDraft();
+      saveMedication({ enabled:false, items:[] });
       renderMedication();
     }
   }
 
-  function ensureTodayMedLog(med){
+  function ensureTodayMedLog(medState){
     const today = todayISO();
     const log = loadMedLog();
-    if(!log[today]) log[today] = {};
-    const times = med?.times || [];
 
-    times.forEach(t => {
-      if(!log[today][t]){
-        log[today][t] = {
-          scheduled: t,
-          status: "pendiente",
-          takenAt: ""
-        };
-      }
+    if(!log[today]) log[today] = {};
+
+    const items = medState?.items || [];
+    items.forEach(item => {
+      if(!log[today][item.id]) log[today][item.id] = {};
+
+      item.times.forEach(t => {
+        if(!log[today][item.id][t]){
+          log[today][item.id][t] = {
+            scheduled: t,
+            status: "pendiente",
+            takenAt: ""
+          };
+        }
+      });
+
+      Object.keys(log[today][item.id]).forEach(timeKey => {
+        if(!item.times.includes(timeKey)){
+          delete log[today][item.id][timeKey];
+        }
+      });
     });
 
-    Object.keys(log[today]).forEach(k => {
-      if(!times.includes(k)){
-        delete log[today][k];
+    Object.keys(log[today]).forEach(medId => {
+      if(!items.some(item => item.id === medId)){
+        delete log[today][medId];
       }
     });
 
@@ -1498,52 +1685,59 @@ canvas{
     return log;
   }
 
-  function markMedicationStatus(timeKey, status){
-    const med = loadMedication();
-    if(!med || !med.enabled) return;
+  function markMedicationStatus(medId, timeKey, status){
+    const medState = loadMedication();
+    if(!medState || !medState.enabled || !medState.items.length) return;
+
     const today = todayISO();
-    const log = ensureTodayMedLog(med);
+    const log = ensureTodayMedLog(medState);
     const now = nowTime();
 
-    if(!log[today][timeKey]){
-      log[today][timeKey] = { scheduled: timeKey, status:"pendiente", takenAt:"" };
+    if(!log[today][medId]) log[today][medId] = {};
+    if(!log[today][medId][timeKey]){
+      log[today][medId][timeKey] = { scheduled: timeKey, status:"pendiente", takenAt:"" };
     }
 
     if(status === "omitida"){
-      log[today][timeKey].status = "omitida";
-      log[today][timeKey].takenAt = "";
+      log[today][medId][timeKey].status = "omitida";
+      log[today][medId][timeKey].takenAt = "";
     } else {
-      log[today][timeKey].status = status;
-      log[today][timeKey].takenAt = now;
+      log[today][medId][timeKey].status = status;
+      log[today][medId][timeKey].takenAt = now;
     }
 
     saveMedLog(log);
     renderMedication();
   }
 
-  function evaluateMedicationAlert(med, dayLog){
-    if(!med || !med.enabled) return { label:"Sin alerta", cls:"status-pill" };
+  function evaluateMedicationAlert(medState, dayLog){
+    if(!medState || !medState.enabled || !medState.items.length){
+      return { label:"Sin alerta", cls:"status-pill" };
+    }
 
     const nowMin = timeToMinutes(nowTime());
     let hasLate = false;
     let hasMissed = false;
     let hasPendingSoon = false;
 
-    med.times.forEach(t => {
-      const entry = dayLog?.[t];
-      const sched = timeToMinutes(t);
-      if(sched == null || nowMin == null) return;
+    medState.items.forEach(item => {
+      item.times.forEach(t => {
+        const entry = dayLog?.[item.id]?.[t];
+        const sched = timeToMinutes(t);
+        if(sched == null || nowMin == null) return;
 
-      if(entry?.status === "omitida"){
-        hasMissed = true;
-        return;
-      }
-      if(entry?.status === "pendiente"){
-        const diff = nowMin - sched;
-        if(diff > 60) hasMissed = true;
-        else if(diff > 15) hasLate = true;
-        else if(diff >= -15 && diff <= 15) hasPendingSoon = true;
-      }
+        if(entry?.status === "omitida"){
+          hasMissed = true;
+          return;
+        }
+
+        if(entry?.status === "pendiente"){
+          const diff = nowMin - sched;
+          if(diff > 60) hasMissed = true;
+          else if(diff > 15) hasLate = true;
+          else if(diff >= -15 && diff <= 15) hasPendingSoon = true;
+        }
+      });
     });
 
     if(hasMissed) return { label:"Dosis omitida o muy retrasada", cls:"status-pill status-bad" };
@@ -1553,97 +1747,102 @@ canvas{
   }
 
   function renderMedication(){
-    const med = loadMedication();
+    const medState = loadMedication();
     ui.medDailyCards.innerHTML = "";
 
-    if(!med || !med.enabled){
+    if(!medState || !medState.enabled || !medState.items.length){
       ui.medTodaySummary.textContent = "Aún no hay medicación configurada.";
       ui.medAlertBadge.textContent = "Sin alerta";
       ui.medAlertBadge.className = "status-pill";
       return;
     }
 
-    const log = ensureTodayMedLog(med);
+    const log = ensureTodayMedLog(medState);
     const today = todayISO();
     const dayLog = log[today] || {};
 
     ui.medTodaySummary.textContent =
-      `${med.name || "Medicamento"} · ${med.dose || "—"} · ${med.frequency || 1} toma(s) al día`;
+      `${medState.items.length} medicamento(s) configurado(s) para hoy.`;
 
-    const badge = evaluateMedicationAlert(med, dayLog);
+    const badge = evaluateMedicationAlert(medState, dayLog);
     ui.medAlertBadge.textContent = badge.label;
     ui.medAlertBadge.className = badge.cls;
 
-    med.times.forEach((t) => {
-      const entry = dayLog[t] || { status:"pendiente", takenAt:"" };
-      let text = "Pendiente";
-      let cls = "status-pill";
-      if(entry.status === "a_tiempo"){
-        text = `Tomada a tiempo${entry.takenAt ? ` · ${entry.takenAt}` : ""}`;
-        cls = "status-pill status-ok";
-      } else if(entry.status === "tarde"){
-        text = `Tomada tarde${entry.takenAt ? ` · ${entry.takenAt}` : ""}`;
-        cls = "status-pill status-warn";
-      } else if(entry.status === "omitida"){
-        text = "Omitida";
-        cls = "status-pill status-bad";
-      }
+    medState.items.forEach((item) => {
+      item.times.forEach((t) => {
+        const entry = dayLog?.[item.id]?.[t] || { status:"pendiente", takenAt:"" };
+        let text = "Pendiente";
+        let cls = "status-pill";
+        if(entry.status === "a_tiempo"){
+          text = `Tomada a tiempo${entry.takenAt ? ` · ${entry.takenAt}` : ""}`;
+          cls = "status-pill status-ok";
+        } else if(entry.status === "tarde"){
+          text = `Tomada tarde${entry.takenAt ? ` · ${entry.takenAt}` : ""}`;
+          cls = "status-pill status-warn";
+        } else if(entry.status === "omitida"){
+          text = "Omitida";
+          cls = "status-pill status-bad";
+        }
 
-      ui.medDailyCards.innerHTML += `
-        <div class="med-card">
-          <div class="row">
-            <div>
-              <div><strong>${escapeHtml(med.name)}</strong> · ${escapeHtml(med.dose)}</div>
-              <div class="small">Horario programado: ${escapeHtml(t)}</div>
-              <div class="${cls}" style="margin-top:8px">${escapeHtml(text)}</div>
+        ui.medDailyCards.innerHTML += `
+          <div class="med-card">
+            <div class="row">
+              <div>
+                <div><strong>${escapeHtml(item.name)}</strong> · ${escapeHtml(item.dose)}</div>
+                <div class="small">Horario programado: ${escapeHtml(t)}</div>
+                <div class="small">${escapeHtml(item.notes || "Sin notas.")}</div>
+                <div class="${cls}" style="margin-top:8px">${escapeHtml(text)}</div>
+              </div>
+            </div>
+            <div class="row" style="margin-top:12px">
+              <button class="btn take" data-med-action="a_tiempo" data-med-id="${escapeHtml(item.id)}" data-med-time="${escapeHtml(t)}" type="button">Ya la tomé</button>
+              <button class="btn late" data-med-action="tarde" data-med-id="${escapeHtml(item.id)}" data-med-time="${escapeHtml(t)}" type="button">La tomé tarde</button>
+              <button class="btn skip" data-med-action="omitida" data-med-id="${escapeHtml(item.id)}" data-med-time="${escapeHtml(t)}" type="button">Omitida</button>
             </div>
           </div>
-          <div class="row" style="margin-top:12px">
-            <button class="btn take" data-med-action="a_tiempo" data-med-time="${escapeHtml(t)}" type="button">Ya la tomé</button>
-            <button class="btn late" data-med-action="tarde" data-med-time="${escapeHtml(t)}" type="button">La tomé tarde</button>
-            <button class="btn skip" data-med-action="omitida" data-med-time="${escapeHtml(t)}" type="button">Omitida</button>
-          </div>
-        </div>
-      `;
+        `;
+      });
     });
 
     [...document.querySelectorAll("[data-med-action]")].forEach(btn => {
       btn.addEventListener("click", () => {
-        markMedicationStatus(btn.dataset.medTime, btn.dataset.medAction);
+        markMedicationStatus(btn.dataset.medId, btn.dataset.medTime, btn.dataset.medAction);
       });
     });
   }
 
   function maybeNotifyMedication(){
-    const med = loadMedication();
-    if(!med || !med.enabled || !med.times?.length) return;
+    const medState = loadMedication();
+    if(!medState || !medState.enabled || !medState.items.length) return;
 
     const today = todayISO();
     const lastAlert = localStorage.getItem(MED_ALERT_LAST_KEY);
     const nowMin = timeToMinutes(nowTime());
-    const log = ensureTodayMedLog(med);
+    const log = ensureTodayMedLog(medState);
     const dayLog = log[today] || {};
 
     let shouldAlert = false;
     let msg = "";
 
-    med.times.forEach(t => {
-      const sched = timeToMinutes(t);
-      if(sched == null || nowMin == null) return;
-      const diff = nowMin - sched;
-      const entry = dayLog[t];
+    medState.items.forEach(item => {
+      item.times.forEach(t => {
+        const sched = timeToMinutes(t);
+        if(sched == null || nowMin == null) return;
+        const diff = nowMin - sched;
+        const entry = dayLog?.[item.id]?.[t];
 
-      if(entry?.status === "pendiente" && diff >= -10 && diff <= 20){
-        shouldAlert = true;
-        msg = `Recordatorio: ${med.name} (${med.dose}) programado a las ${t}.`;
-      }
-      if(entry?.status === "pendiente" && diff > 60){
-        shouldAlert = true;
-        msg = `Atención: la toma de ${med.name} de las ${t} sigue pendiente o pudo omitirse.`;
-      }
+        if(entry?.status === "pendiente" && diff >= -10 && diff <= 20){
+          shouldAlert = true;
+          msg = `Recordatorio: ${item.name} (${item.dose}) programado a las ${t}.`;
+        }
+        if(entry?.status === "pendiente" && diff > 60){
+          shouldAlert = true;
+          msg = `Atención: la toma de ${item.name} de las ${t} sigue pendiente o pudo omitirse.`;
+        }
+      });
     });
 
-    if(!shouldAlert) return;
+    if(!shouldAlert || !msg) return;
     if(lastAlert === `${today}-${msg}`) return;
 
     if ("Notification" in window && Notification.permission === "granted") {
@@ -1700,6 +1899,9 @@ canvas{
           if(parsed.medicationLog && typeof parsed.medicationLog === "object") saveMedLog(parsed.medicationLog);
         }
 
+        const medState = loadMedication();
+        medDraftItems = medState.items.slice();
+        renderMedicationDraft();
         ui.importMsg.textContent = "Respaldo importado correctamente.";
         renderAll();
       }catch{
@@ -1810,56 +2012,77 @@ canvas{
   }
 
   function initMedication(){
-    const med = loadMedication();
-    if(med && med.enabled){
-      ui.medEnabled.checked = true;
-      ui.medName.value = med.name || "";
-      ui.medDose.value = med.dose || "";
-      ui.medFrequency.value = String(med.frequency || 1);
-      ui.medTime1.value = med.times?.[0] || "";
-      ui.medTime2.value = med.times?.[1] || "";
-      ui.medTime3.value = med.times?.[2] || "";
-      ui.medNotes.value = med.notes || "";
-    } else {
-      ui.medEnabled.checked = false;
-      ui.medFrequency.value = "1";
-    }
-
+    const medState = loadMedication();
+    ui.medEnabled.checked = !!medState.enabled;
+    medDraftItems = medState.items.slice();
     updateMedicationFrequencyUI();
     toggleMedicationForm();
+    renderMedicationDraft();
 
     ui.medEnabled.addEventListener("change", toggleMedicationForm);
     ui.medFrequency.addEventListener("change", updateMedicationFrequencyUI);
 
-    ui.saveMedBtn.addEventListener("click", () => {
-      const enabled = ui.medEnabled.checked;
-      const frequency = Number(ui.medFrequency.value || 1);
-      const times = [ui.medTime1.value, ui.medTime2.value, ui.medTime3.value]
-        .slice(0, frequency)
-        .filter(Boolean);
+    ui.addMedBtn.addEventListener("click", () => {
+      const medItem = buildMedicationFromInputs();
 
-      const medData = {
-        enabled,
-        name: ui.medName.value.trim(),
-        dose: ui.medDose.value.trim(),
-        frequency,
-        times,
-        notes: ui.medNotes.value.trim()
-      };
-
-      if(enabled && (!medData.name || !medData.dose || !times.length)){
+      if(!medItem.name || !medItem.dose || !medItem.times.length){
         alert("Completa al menos nombre, dosis y un horario.");
         return;
       }
 
-      saveMedication(medData);
+      medDraftItems.push(medItem);
+      renderMedicationDraft();
+      clearMedicationInputs();
+      alert("Medicamento agregado a la lista.");
+    });
+
+    ui.saveMedBtn.addEventListener("click", () => {
+      const enabled = ui.medEnabled.checked;
+
+      if(enabled && medDraftItems.length === 0){
+        alert("Agrega al menos un medicamento a la lista antes de guardar.");
+        return;
+      }
+
+      saveMedication({
+        enabled,
+        items: medDraftItems
+      });
+
       renderMedication();
       maybeNotifyMedication();
-      alert("Medicación guardada.");
+      alert("Lista de medicamentos guardada.");
+    });
+  }
+
+  function initInstallPrompt(){
+    window.addEventListener("beforeinstallprompt", (e) => {
+      e.preventDefault();
+      deferredInstallPrompt = e;
+      ui.installBtn.style.display = "block";
+      ui.installMsg.textContent = "Puedes instalar Brújula Emocional como app en este dispositivo.";
+    });
+
+    ui.installBtn.addEventListener("click", async () => {
+      if(!deferredInstallPrompt) return;
+      deferredInstallPrompt.prompt();
+      try{
+        await deferredInstallPrompt.userChoice;
+      }catch{}
+      deferredInstallPrompt = null;
+      ui.installBtn.style.display = "none";
+    });
+
+    window.addEventListener("appinstalled", () => {
+      ui.installBtn.style.display = "none";
+      ui.installMsg.textContent = "La app ya fue instalada.";
+      deferredInstallPrompt = null;
     });
   }
 
   function init(){
+    migrateOldMedicationIfNeeded();
+
     ui.date.value = todayISO();
     ui.time.value = nowTime();
     randomGeneralQuote();
@@ -1870,6 +2093,7 @@ canvas{
     initDiscreetMode();
     initModals();
     initMedication();
+    initInstallPrompt();
     maybeNotifyReminder();
     maybeNotifyMedication();
 
@@ -1913,7 +2137,12 @@ canvas{
     ui.deleteAllBtn.addEventListener("click", () => {
       if(!confirm("¿Seguro que quieres borrar todos los registros guardados en este dispositivo?")) return;
       localStorage.removeItem(DATA_KEY);
+      localStorage.removeItem(MED_KEY);
       localStorage.removeItem(MED_LOG_KEY);
+      localStorage.removeItem(OLD_MED_KEY);
+      localStorage.removeItem(OLD_MED_LOG_KEY);
+      medDraftItems = [];
+      renderMedicationDraft();
       renderAll();
       ui.importMsg.textContent = "";
       showMsg("Datos borrados");
