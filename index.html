@@ -1,386 +1,2268 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="es">
-
 <head>
-
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Brújula Emocional</title>
-
 <link rel="manifest" href="manifest.webmanifest">
-
-<meta name="theme-color" content="#6366f1">
-
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<meta name="theme-color" content="#7c3aed">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Brújula Emocional">
+<link rel="apple-touch-icon" href="icons/icon-192.png">
+<link rel="icon" href="icon.svg" type="image/svg+xml">
 
 <style>
+:root{
+  --bg:#0f172a;
+  --bg-soft:#172033;
+  --panel:#1b2740;
+  --panel-2:#22304f;
+  --text:#eef4ff;
+  --muted:#adbad8;
+  --line:#314363;
+  --accent:#7c3aed;
+  --accent-2:#a78bfa;
+  --good:#22c55e;
+  --warn:#f59e0b;
+  --bad:#f43f5e;
+  --chip:#162037;
+  --chip-on:#26375f;
+  --hero1:rgba(124,58,237,.16);
+  --hero2:rgba(59,130,246,.10);
+  --shadow:0 18px 40px rgba(0,0,0,.26);
+}
 
+/* OSCURO */
+body.theme-noche{
+  --bg:#0f172a; --bg-soft:#172033; --panel:#1b2740; --panel-2:#22304f;
+  --text:#eef4ff; --muted:#adbad8; --line:#314363; --accent:#7c3aed; --accent-2:#a78bfa;
+  --good:#22c55e; --warn:#f59e0b; --bad:#f43f5e; --chip:#162037; --chip-on:#26375f;
+  --hero1:rgba(124,58,237,.16); --hero2:rgba(59,130,246,.10); --shadow:0 18px 40px rgba(0,0,0,.26);
+}
+
+/* CLAROS */
+body.theme-orquidea{
+  --bg:#f7f2ff; --bg-soft:#fcf8ff; --panel:#ffffff; --panel-2:#f7f1ff;
+  --text:#2a1f43; --muted:#76688f; --line:#e6daf7; --accent:#9b5de5; --accent-2:#c77dff;
+  --good:#16a34a; --warn:#d97706; --bad:#e11d48; --chip:#f5efff; --chip-on:#eadcff;
+  --hero1:rgba(155,93,229,.12); --hero2:rgba(199,125,255,.10); --shadow:0 14px 28px rgba(99,81,132,.10);
+}
+body.theme-cielo{
+  --bg:#eef8ff; --bg-soft:#f8fcff; --panel:#ffffff; --panel-2:#f1f9ff;
+  --text:#18324a; --muted:#64829a; --line:#d7eaf7; --accent:#38bdf8; --accent-2:#67e8f9;
+  --good:#16a34a; --warn:#d97706; --bad:#e11d48; --chip:#edf8ff; --chip-on:#d9f1ff;
+  --hero1:rgba(56,189,248,.12); --hero2:rgba(103,232,249,.10); --shadow:0 14px 28px rgba(60,117,149,.10);
+}
+body.theme-bosque{
+  --bg:#f2fbf5; --bg-soft:#f8fdfa; --panel:#ffffff; --panel-2:#f3fbf5;
+  --text:#1d3a2b; --muted:#6b8d79; --line:#d7ebdd; --accent:#22c55e; --accent-2:#86efac;
+  --good:#16a34a; --warn:#d97706; --bad:#e11d48; --chip:#eefaf1; --chip-on:#d8f4df;
+  --hero1:rgba(34,197,94,.12); --hero2:rgba(134,239,172,.09); --shadow:0 14px 28px rgba(73,124,89,.10);
+}
+body.theme-aurora{
+  --bg:#fff2fa; --bg-soft:#fff8fc; --panel:#ffffff; --panel-2:#fff1f8;
+  --text:#4a2142; --muted:#936d8b; --line:#f0d8e9; --accent:#ec4899; --accent-2:#a855f7;
+  --good:#16a34a; --warn:#d97706; --bad:#e11d48; --chip:#fff0f8; --chip-on:#f8d9ee;
+  --hero1:rgba(236,72,153,.12); --hero2:rgba(168,85,247,.10); --shadow:0 14px 28px rgba(132,86,118,.10);
+}
+body.theme-vino{
+  --bg:#fff4f6; --bg-soft:#fff9fa; --panel:#ffffff; --panel-2:#fff1f3;
+  --text:#4a1f2d; --muted:#8f6876; --line:#f1d8e0; --accent:#9f1239; --accent-2:#be185d;
+  --good:#16a34a; --warn:#d97706; --bad:#dc2626; --chip:#fff0f3; --chip-on:#f7d7df;
+  --hero1:rgba(159,18,57,.10); --hero2:rgba(190,24,93,.08); --shadow:0 14px 28px rgba(130,86,99,.10);
+}
+
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
 body{
-font-family:Arial,Helvetica,sans-serif;
-background:#f4f6fb;
-margin:0;
-padding:20px;
+  min-height:100vh;
+  font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+  color:var(--text);
+  background:
+    radial-gradient(circle at top left, var(--hero1), transparent 24%),
+    radial-gradient(circle at top right, var(--hero2), transparent 22%),
+    linear-gradient(160deg,var(--bg),var(--bg-soft));
 }
 
-.container{
-max-width:800px;
-margin:auto;
+body.discreet header .brand h1,
+body.discreet .heroTitle,
+body.discreet .brand .sub,
+body.discreet .author,
+body.discreet .themeBar,
+body.discreet #quote,
+body.discreet #quoteSub,
+body.discreet .welcomeOverlay,
+body.discreet .license-note,
+body.discreet .footer-brand{
+  display:none !important;
+}
+body.discreet .brand::after{
+  content:"Panel personal";
+  font-size:22px;
+  font-weight:800;
+}
+body.discreet .heroText::before{
+  content:"Vista personal de seguimiento.";
+  color:var(--muted);
+}
+body.discreet .heroText{
+  font-size:0;
+}
+body.discreet .privacy-mask{
+  filter:blur(7px);
+  user-select:none;
+}
+body.discreet .discreet-safe{
+  filter:none !important;
 }
 
+header{
+  position:sticky; top:0; z-index:30;
+  padding:14px 16px;
+  border-bottom:1px solid var(--line);
+  backdrop-filter:blur(10px);
+  background:color-mix(in srgb, var(--bg) 82%, transparent);
+}
+.wrap{max-width:1240px;margin:auto}
+.topbar,.badges,.themeBar,.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.brand{flex:1;min-width:250px}
+h1{margin:0;font-size:22px;letter-spacing:.2px}
+h2{margin:0 0 10px;font-size:16px}
+h3{margin:0}
+.sub{margin-top:5px;font-size:12px;color:var(--muted)}
+.small{font-size:12px;color:var(--muted)}
+.pill{
+  display:inline-flex;align-items:center;gap:8px;
+  padding:8px 12px;border-radius:999px;border:1px solid var(--line);
+  background:color-mix(in srgb, var(--panel) 92%, transparent);
+  color:var(--muted);font-size:12px
+}
+main{max-width:1240px;margin:18px auto;padding:0 12px 28px}
+.grid{display:grid;grid-template-columns:1.15fr .85fr;gap:16px}
+@media (max-width:980px){.grid{grid-template-columns:1fr}}
 .card{
-background:white;
-padding:20px;
-border-radius:10px;
-margin-bottom:20px;
-box-shadow:0 2px 10px rgba(0,0,0,0.1);
+  background:linear-gradient(180deg, color-mix(in srgb, var(--panel) 96%, transparent), color-mix(in srgb, var(--panel-2) 98%, transparent));
+  border:1px solid var(--line);border-radius:20px;padding:16px;box-shadow:var(--shadow);margin-bottom:16px
 }
-
-button{
-background:#6366f1;
-border:none;
-color:white;
-padding:10px;
-border-radius:6px;
-margin-top:5px;
-cursor:pointer;
+.hero{
+  display:grid;grid-template-columns:1.1fr .9fr;gap:14px;align-items:center
 }
-
+@media (max-width:900px){.hero{grid-template-columns:1fr}}
+.heroTitle{font-size:24px;font-weight:900;line-height:1.15;margin:0 0 8px}
+.heroText{font-size:14px;line-height:1.55;color:var(--muted)}
+.heroBox{
+  border:1px solid var(--line);border-radius:18px;padding:16px;background:var(--chip)
+}
+.heroMini{
+  display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-top:12px
+}
+.miniStat{
+  border:1px solid var(--line);border-radius:14px;padding:12px;background:color-mix(in srgb, var(--panel) 80%, transparent)
+}
+.miniStat .v{font-weight:900;font-size:20px;margin-top:4px}
+.col{flex:1;min-width:220px}
+label{display:block;margin:10px 0 6px;color:var(--muted);font-size:12px}
 input,select,textarea{
-width:100%;
-padding:8px;
-margin-top:5px;
-margin-bottom:10px;
+  width:100%;padding:11px 12px;border-radius:12px;border:1px solid var(--line);
+  background:var(--chip);color:var(--text);outline:none;font:inherit
 }
-
-.small{
-text-align:center;
-font-size:12px;
-color:#666;
+input:focus,select:focus,textarea:focus{
+  border-color:var(--accent-2);
+  box-shadow:0 0 0 3px color-mix(in srgb, var(--accent) 18%, transparent)
 }
-
+textarea{resize:vertical;min-height:84px}
+.btn{
+  padding:11px 14px;border:none;border-radius:12px;cursor:pointer;font-weight:800;transition:.18s ease
+}
+.btn:hover{transform:translateY(-1px)}
+.btn.main{background:linear-gradient(135deg,var(--accent),var(--accent-2));color:white}
+.btn.sec{background:transparent;border:1px solid var(--line);color:var(--text)}
+.btn.good{background:var(--good);color:#072514}
+.btn.warn{background:var(--warn);color:#2b2004}
+.btn.bad{background:var(--bad);color:#fff}
+.btn.soft{
+  background:var(--chip);
+  border:1px solid var(--line);
+  color:var(--text);
+}
+.btn.take{background:var(--good);color:#052010}
+.btn.late{background:var(--warn);color:#2a1b05}
+.btn.skip{background:var(--bad);color:#fff}
+.btn.install{
+  background:linear-gradient(135deg,var(--accent),var(--accent-2));
+  color:#fff;
+  width:100%;
+}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{
+  padding:8px 11px;border-radius:999px;border:1px solid var(--line);
+  background:var(--chip);font-size:12px;cursor:pointer;user-select:none
+}
+.chip[data-on="1"]{background:var(--chip-on);border-color:color-mix(in srgb, var(--accent) 55%, white)}
+.tag{
+  display:inline-flex;align-items:center;gap:6px;padding:6px 10px;border:1px solid var(--line);
+  border-radius:999px;background:var(--chip);color:var(--muted);font-size:11px
+}
+.tableWrap{overflow:auto;border:1px solid var(--line);border-radius:14px;margin-top:10px}
+table{width:100%;border-collapse:collapse;font-size:12px}
+th,td{padding:9px 7px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}
+th{color:var(--muted);font-weight:800}
+.empty{padding:16px;color:var(--muted);font-size:12px}
+.kpis{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+.kpi{
+  flex:1;min-width:140px;padding:12px;border:1px solid var(--line);
+  border-radius:14px;background:var(--chip)
+}
+.kpi .v{margin-top:4px;font-size:18px;font-weight:900}
+.noteBox{
+  padding:12px;margin-top:12px;border-radius:14px;border:1px solid var(--line);background:var(--chip)
+}
+.themeBtn{
+  padding:8px 12px;border-radius:999px;border:1px solid var(--line);
+  background:var(--chip);color:var(--text);cursor:pointer;font-size:12px;font-weight:700
+}
+.themeBtn.active{outline:2px solid color-mix(in srgb, var(--accent) 55%, white)}
+.themePreview{width:12px;height:12px;border-radius:50%;display:inline-block;margin-right:6px;vertical-align:-1px}
+.footer{text-align:center;font-size:12px;color:var(--muted);padding:8px 12px 22px}
+.moodGrid{display:grid;grid-template-columns:repeat(5,1fr);gap:8px}
+@media (max-width:650px){.moodGrid{grid-template-columns:repeat(2,1fr)}}
+.moodBtn{
+  border:1px solid var(--line);background:var(--chip);color:var(--text);
+  border-radius:14px;padding:10px 8px;cursor:pointer;text-align:center;font-size:13px
+}
+.moodBtn.active{background:var(--chip-on);border-color:color-mix(in srgb, var(--accent) 55%, white)}
+.moodBtn .emoji{display:block;font-size:22px;margin-bottom:4px}
+input[type="file"]{padding:8px}
+canvas{
+  width:100%;height:220px;background:var(--chip);border:1px solid var(--line);border-radius:14px;display:block
+}
+.welcomeOverlay,.modal{
+  position:fixed;inset:0;background:rgba(0,0,0,.45);display:none;align-items:center;justify-content:center;z-index:60;padding:16px
+}
+.welcomeCard,.modalCard{
+  width:min(680px,100%);background:var(--panel);border:1px solid var(--line);border-radius:20px;
+  box-shadow:var(--shadow);padding:22px
+}
+.welcomeTitle{font-size:24px;font-weight:900;margin:0 0 8px}
+.welcomeText{font-size:14px;line-height:1.6;color:var(--muted);margin-bottom:14px}
+.listClean{margin:0;padding-left:18px;color:var(--muted);font-size:14px;line-height:1.6}
+.reflectionItem{
+  padding:10px 12px;border-radius:12px;border:1px solid var(--line);background:var(--chip);margin-top:10px
+}
+.author{font-size:12px;color:var(--muted);margin-top:8px}
+.switch{
+  display:flex;align-items:center;gap:10px;flex-wrap:wrap
+}
+.switch input[type="checkbox"]{
+  width:auto;
+  transform:scale(1.15);
+}
+.license-note{
+  margin-top:10px;
+  padding:10px 12px;
+  border-radius:12px;
+  border:1px dashed var(--line);
+  background:var(--chip);
+}
+.tendency-up{color:var(--bad)}
+.tendency-down{color:var(--good)}
+.tendency-flat{color:var(--warn)}
+.footer-brand{
+  font-weight:700;
+}
+.codebox{
+  font-family:ui-monospace,SFMono-Regular,Consolas,monospace;
+  font-size:12px;
+  background:var(--chip);
+  border:1px solid var(--line);
+  padding:8px 10px;
+  border-radius:10px;
+  display:inline-block;
+}
+.med-card{
+  border:1px solid var(--line);
+  border-radius:16px;
+  padding:12px;
+  margin-top:12px;
+  background:var(--chip);
+}
+.med-list{
+  margin-top:12px;
+  display:grid;
+  gap:10px;
+}
+.med-row{
+  border:1px solid var(--line);
+  border-radius:14px;
+  padding:12px;
+  background:color-mix(in srgb, var(--panel) 80%, transparent);
+}
+.status-pill{
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
+  padding:6px 10px;
+  border-radius:999px;
+  border:1px solid var(--line);
+  font-size:11px;
+}
+.status-ok{background:rgba(34,197,94,.15)}
+.status-warn{background:rgba(245,158,11,.15)}
+.status-bad{background:rgba(244,63,94,.15)}
+.installWrap{margin-top:12px}
+.versionBadge{
+  margin-top:6px;
+  font-size:11px;
+  color:var(--muted);
+}
 </style>
-
 </head>
+<body class="theme-noche">
+<header>
+  <div class="wrap">
+    <div class="topbar">
+      <div class="brand">
+        <h1>Brújula Emocional</h1>
+        <div class="sub">Registro personal de emociones y bienestar · privado · útil para adolescentes y adultos</div>
+        <div class="versionBadge">Versión: v7.0 estable</div>
+      </div>
+      <div class="badges">
+        <span class="pill discreet-safe" id="todayPill">Hoy: —</span>
+        <span class="pill discreet-safe" id="weekPill">Semana: —</span>
+        <span class="pill discreet-safe" id="countPill">Total: —</span>
+      </div>
+    </div>
 
-<body>
+    <div class="themeBar" style="margin-top:10px">
+      <button class="themeBtn active" data-theme="noche" type="button"><span class="themePreview" style="background:#7c3aed"></span>Noche</button>
+      <button class="themeBtn" data-theme="orquidea" type="button"><span class="themePreview" style="background:#c77dff"></span>Orquídea</button>
+      <button class="themeBtn" data-theme="cielo" type="button"><span class="themePreview" style="background:#38bdf8"></span>Cielo</button>
+      <button class="themeBtn" data-theme="bosque" type="button"><span class="themePreview" style="background:#22c55e"></span>Bosque</button>
+      <button class="themeBtn" data-theme="aurora" type="button"><span class="themePreview" style="background:#ec4899"></span>Aurora</button>
+      <button class="themeBtn" data-theme="vino" type="button"><span class="themePreview" style="background:#9f1239"></span>Vino</button>
+    </div>
+  </div>
+</header>
 
-<div class="container">
+<main>
+  <div class="card">
+    <div class="hero">
+      <div>
+        <div class="heroTitle">Una app para observar cómo te sientes, no para juzgarte</div>
+        <div class="heroText">
+          Brújula Emocional te ayuda a registrar emociones, situaciones, cuidado personal y patrones de bienestar.
+          Ahora también puede ayudarte a dar seguimiento a medicación prescrita, con recordatorio local dentro de la app.
+        </div>
+        <div class="author">Autoría y adaptación visual: Claudia Alejandra Garza Hernández</div>
+        <div class="license-note">
+          <div class="small"><strong>Licencia y autoría protegida.</strong> Esta app conserva crédito visible de autoría, bloque “Acerca de” y referencia de uso personal/educativo. No debe redistribuirse eliminando la atribución.</div>
+        </div>
+      </div>
+      <div class="heroBox">
+        <div class="small">Vista rápida</div>
+        <div class="heroMini">
+          <div class="miniStat">
+            <div class="small">Registros hoy</div>
+            <div class="v discreet-safe" id="heroToday">0</div>
+          </div>
+          <div class="miniStat">
+            <div class="small">Promedio semana</div>
+            <div class="v discreet-safe" id="heroWeekAvg">—</div>
+          </div>
+          <div class="miniStat">
+            <div class="small">Emoción frecuente</div>
+            <div class="v discreet-safe" id="heroEmotion">—</div>
+          </div>
+          <div class="miniStat">
+            <div class="small">Tema activo</div>
+            <div class="v discreet-safe" id="heroTheme">Noche</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 
-<h2 style="text-align:center;">Brújula Emocional</h2>
+  <div class="grid">
+    <section>
+      <div class="card">
+        <h2>Registro emocional</h2>
+        <div class="small">Escribe solo lo necesario. La meta es conocerte mejor, no hacerlo perfecto.</div>
 
-<div class="small">
-versión 8
+        <label>¿Cómo te sientes hoy?</label>
+        <div class="moodGrid" id="moodGrid">
+          <button class="moodBtn active" data-mood="calma" type="button"><span class="emoji">😌</span>Calma</button>
+          <button class="moodBtn" data-mood="alegria" type="button"><span class="emoji">🙂</span>Alegría</button>
+          <button class="moodBtn" data-mood="estres" type="button"><span class="emoji">😵</span>Estrés</button>
+          <button class="moodBtn" data-mood="tristeza" type="button"><span class="emoji">😢</span>Tristeza</button>
+          <button class="moodBtn" data-mood="enojo" type="button"><span class="emoji">😠</span>Enojo</button>
+        </div>
+
+        <div class="row">
+          <div class="col">
+            <label>Fecha</label>
+            <input type="date" id="date">
+          </div>
+          <div class="col">
+            <label>Hora</label>
+            <input type="time" id="time">
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col">
+            <label>Perfil</label>
+            <select id="profile">
+              <option value="adolescente">Adolescente</option>
+              <option value="adulto" selected>Adulto</option>
+              <option value="otro">Otro</option>
+            </select>
+          </div>
+          <div class="col">
+            <label>Área</label>
+            <select id="area">
+              <option value="escuela">Escuela</option>
+              <option value="trabajo">Trabajo</option>
+              <option value="familia">Familia</option>
+              <option value="amistades">Amistades</option>
+              <option value="pareja">Pareja</option>
+              <option value="salud">Salud</option>
+              <option value="dinero">Dinero</option>
+              <option value="cambios">Cambios o incertidumbre</option>
+              <option value="personal">Algo personal</option>
+              <option value="otro">Otro</option>
+            </select>
+          </div>
+        </div>
+
+        <label>Emoción principal</label>
+        <select id="emotion">
+          <option value="calma">Calma</option>
+          <option value="alegria">Alegría</option>
+          <option value="ansiedad">Ansiedad</option>
+          <option value="tristeza">Tristeza</option>
+          <option value="enojo">Enojo</option>
+          <option value="miedo">Miedo</option>
+          <option value="estres">Estrés</option>
+          <option value="frustracion">Frustración</option>
+          <option value="culpa">Culpa</option>
+          <option value="verguenza">Vergüenza</option>
+          <option value="soledad">Soledad</option>
+          <option value="confusion">Confusión</option>
+          <option value="esperanza">Esperanza</option>
+          <option value="otro">Otra</option>
+        </select>
+
+        <div class="row">
+          <div class="col">
+            <label>Intensidad emocional (0–10)</label>
+            <input type="number" id="intensity" min="0" max="10" value="5">
+          </div>
+          <div class="col">
+            <label>Energía (0–10)</label>
+            <input type="number" id="energy" min="0" max="10" value="5">
+          </div>
+        </div>
+
+        <label>¿Qué pasó?</label>
+        <textarea id="trigger" placeholder="Ej. Tuve una discusión, me sentí ignorada/o, tuve mucha carga, me preocupó algo..."></textarea>
+
+        <label>¿Qué pensaste?</label>
+        <textarea id="thoughts" placeholder="Ej. No voy a poder, necesito una pausa, estoy cansada/o, quiero sentirme mejor..."></textarea>
+
+        <label>¿Qué notaste en tu cuerpo?</label>
+        <div class="chips" id="bodyChips">
+          <div class="chip" data-key="pecho">Pecho apretado</div>
+          <div class="chip" data-key="estomago">Nudo en el estómago</div>
+          <div class="chip" data-key="cansancio">Cansancio</div>
+          <div class="chip" data-key="llanto">Ganas de llorar</div>
+          <div class="chip" data-key="temblor">Temblor / inquietud</div>
+          <div class="chip" data-key="dolor">Dolor de cabeza</div>
+          <div class="chip" data-key="respiracion">Respiración agitada</div>
+          <div class="chip" data-key="tension">Tensión muscular</div>
+          <div class="chip" data-key="normal">Sin cambios claros</div>
+        </div>
+
+        <label>¿Qué hiciste para cuidarte?</label>
+        <div class="chips" id="careChips">
+          <div class="chip" data-key="respirar">Respiré profundo</div>
+          <div class="chip" data-key="agua">Tomé agua</div>
+          <div class="chip" data-key="caminar">Caminé / me moví</div>
+          <div class="chip" data-key="escribir">Escribí</div>
+          <div class="chip" data-key="musica">Escuché música</div>
+          <div class="chip" data-key="descanso">Descansé</div>
+          <div class="chip" data-key="hablar">Hablé con alguien</div>
+          <div class="chip" data-key="orar">Oré / medité</div>
+          <div class="chip" data-key="rutina">Seguí con mi rutina</div>
+          <div class="chip" data-key="pausa">Hice una pausa</div>
+        </div>
+
+        <div class="row">
+          <div class="col">
+            <label>¿Eso ayudó?</label>
+            <select id="helped">
+              <option value="si">Sí</option>
+              <option value="masomenos">Más o menos</option>
+              <option value="no">No</option>
+            </select>
+          </div>
+          <div class="col">
+            <label>¿Necesitas apoyo adicional?</label>
+            <select id="support">
+              <option value="no">No por ahora</option>
+              <option value="si_pronto">Sí, pronto</option>
+              <option value="si_hoy">Sí, hoy</option>
+            </select>
+          </div>
+        </div>
+
+        <label>Nota final</label>
+        <textarea id="note" placeholder="Ej. Hoy no fue sencillo, pero sí me cuidé un poco."></textarea>
+
+        <div class="row" style="margin-top:12px">
+          <button class="btn main" id="saveBtn" type="button">Guardar registro</button>
+          <button class="btn sec" id="quickBtn" type="button">Guardar breve</button>
+          <button class="btn warn" id="clearBtn" type="button">Limpiar</button>
+        </div>
+
+        <div class="row" style="margin-top:10px">
+          <span class="tag">Tip: primero nombra la emoción, luego decide qué hacer con ella</span>
+          <span class="small" id="saveMsg"></span>
+        </div>
+      </div>
+
+      <div class="card">
+        <h2>Medicación prescrita</h2>
+        <div class="small">
+          Este espacio es solo para seguimiento personal de medicación indicada por un profesional. No cambia dosis ni sustituye orientación médica.
+        </div>
+
+        <div class="noteBox">
+          <div class="switch">
+            <label style="margin:0">
+              <input type="checkbox" id="medEnabled">
+              Tengo medicación prescrita
+            </label>
+          </div>
+
+          <div id="medFormWrap">
+            <div class="row">
+              <div class="col">
+                <label>Nombre del medicamento</label>
+                <input type="text" id="medName" placeholder="Ej. Sertralina">
+              </div>
+              <div class="col">
+                <label>Dosis</label>
+                <input type="text" id="medDose" placeholder="Ej. 50 mg">
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col">
+                <label>Frecuencia</label>
+                <select id="medFrequency">
+                  <option value="1">1 vez al día</option>
+                  <option value="2">2 veces al día</option>
+                  <option value="3">3 veces al día</option>
+                </select>
+              </div>
+              <div class="col">
+                <label>Hora principal</label>
+                <input type="time" id="medTime1">
+              </div>
+            </div>
+
+            <div class="row" id="medExtraTimesRow" style="display:none">
+              <div class="col">
+                <label>Segunda hora</label>
+                <input type="time" id="medTime2">
+              </div>
+              <div class="col" id="medThirdWrap" style="display:none">
+                <label>Tercera hora</label>
+                <input type="time" id="medTime3">
+              </div>
+            </div>
+
+            <label>Notas médicas personales</label>
+            <textarea id="medNotes" placeholder="Ej. Tomar después de alimentos / no olvidar llevar al trabajo"></textarea>
+
+            <div class="row" style="margin-top:12px">
+              <button class="btn sec" id="addMedBtn" type="button">Agregar medicamento a la lista</button>
+              <button class="btn main" id="saveMedBtn" type="button">Guardar lista de medicamentos</button>
+            </div>
+
+            <div class="med-list" id="medDraftList"></div>
+          </div>
+        </div>
+
+        <div class="med-card">
+          <div class="row">
+            <div>
+              <h3 style="margin:0 0 8px">Estado de hoy</h3>
+              <div class="small" id="medTodaySummary">Aún no hay medicación configurada.</div>
+            </div>
+            <div style="margin-left:auto">
+              <span class="status-pill discreet-safe" id="medAlertBadge">Sin alerta</span>
+            </div>
+          </div>
+
+          <div id="medDailyCards"></div>
+        </div>
+      </div>
+
+      <div class="card privacy-mask">
+        <h2>Registros de hoy</h2>
+        <div class="tableWrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Hora</th>
+                <th>Área</th>
+                <th>Emoción</th>
+                <th>Int.</th>
+                <th>Ayudó</th>
+                <th>Apoyo</th>
+              </tr>
+            </thead>
+            <tbody id="todayTable">
+              <tr><td colspan="6" class="empty">Aún no hay registros para hoy.</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="card privacy-mask">
+        <h2>Historial reciente</h2>
+        <div class="tableWrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Fecha</th>
+                <th>Hora</th>
+                <th>Área</th>
+                <th>Emoción</th>
+                <th>Int.</th>
+                <th>Nota</th>
+                <th>Eliminar</th>
+              </tr>
+            </thead>
+            <tbody id="historyTable">
+              <tr><td colspan="7" class="empty">No hay historial todavía.</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <aside>
+      <div class="card">
+        <h2>Instalar app</h2>
+        <div class="small">Si tu navegador lo permite, puedes instalar Brújula Emocional como app en este dispositivo.</div>
+        <div class="installWrap">
+          <button class="btn install" id="installBtn" type="button" style="display:none">Instalar Brújula Emocional</button>
+          <div class="small" id="installMsg" style="margin-top:8px">
+            En iPhone: comparte la página y elige “Agregar a pantalla de inicio”.
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <h2>Frase para acompañarte</h2>
+        <div id="quote" style="font-size:16px;font-weight:900;line-height:1.5">“Puedo sentir esto sin juzgarme.”</div>
+        <div class="small" id="quoteSub" style="margin-top:8px">Úsala como una pausa breve.</div>
+        <div class="row" style="margin-top:12px">
+          <button class="btn sec" id="newQuoteBtn" type="button">Otra frase ✨</button>
+        </div>
+      </div>
+
+      <div class="card">
+        <h2>Indicadores personales</h2>
+        <div class="kpis">
+          <div class="kpi">
+            <div class="small">Tendencia</div>
+            <div class="v discreet-safe" id="trendBadge">—</div>
+          </div>
+          <div class="kpi">
+            <div class="small">Recordatorio</div>
+            <div class="v discreet-safe" id="reminderStatus">Off</div>
+          </div>
+          <div class="kpi">
+            <div class="small">Modo discreto</div>
+            <div class="v discreet-safe" id="discreetStatus">Off</div>
+          </div>
+        </div>
+
+        <div class="noteBox">
+          <div class="switch">
+            <label style="margin:0">
+              <input type="checkbox" id="reminderToggle">
+              Activar recordatorio diario local
+            </label>
+          </div>
+          <label>Hora del recordatorio emocional</label>
+          <input type="time" id="reminderTime">
+          <div class="small" style="margin-top:8px" id="reminderMsg">
+            Si el navegador lo permite, recibirás un aviso local cuando abras la app cerca de esa hora.
+          </div>
+        </div>
+
+        <div class="noteBox">
+          <div class="switch">
+            <label style="margin:0">
+              <input type="checkbox" id="discreetToggle">
+              Activar modo discreto
+            </label>
+          </div>
+          <div class="small" style="margin-top:8px">
+            Oculta nombres sensibles y difumina tablas para usar la app en público con más privacidad.
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <h2>Gráfica semanal</h2>
+        <div class="small">Muestra la intensidad promedio de los últimos 7 días.</div>
+        <div style="margin-top:10px">
+          <canvas id="weekChart" width="520" height="220"></canvas>
+        </div>
+      </div>
+
+      <div class="card privacy-mask">
+        <h2>Resumen semanal</h2>
+        <div class="kpis">
+          <div class="kpi">
+            <div class="small">Registros</div>
+            <div class="v discreet-safe" id="wkCount">—</div>
+          </div>
+          <div class="kpi">
+            <div class="small">Promedio</div>
+            <div class="v discreet-safe" id="wkAvg">—</div>
+          </div>
+          <div class="kpi">
+            <div class="small">Ayudó</div>
+            <div class="v discreet-safe" id="wkHelped">—</div>
+          </div>
+        </div>
+
+        <div class="tableWrap" style="margin-top:12px">
+          <table>
+            <thead>
+              <tr>
+                <th>Fecha</th>
+                <th>Reg.</th>
+                <th>Prom.</th>
+                <th>Emoción más frecuente</th>
+              </tr>
+            </thead>
+            <tbody id="weekTable">
+              <tr><td colspan="4" class="empty">Aún no hay datos semanales.</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="noteBox">
+          <div class="small" id="insightBox">Tu lectura semanal aparecerá aquí cuando guardes registros.</div>
+        </div>
+      </div>
+
+      <div class="card privacy-mask">
+        <h2>Reflexión breve</h2>
+        <div class="reflectionItem"><strong>¿Qué me ayudó más hoy?</strong><div class="small" id="reflect1">Aún no hay suficientes datos.</div></div>
+        <div class="reflectionItem"><strong>¿Qué emoción se repitió más esta semana?</strong><div class="small" id="reflect2">Aún no hay suficientes datos.</div></div>
+        <div class="reflectionItem"><strong>¿Qué puedo intentar mañana?</strong><div class="small" id="reflect3">Registra un par de días para recibir sugerencias más útiles.</div></div>
+      </div>
+
+      <div class="card">
+        <h2>Respaldo</h2>
+        <div class="row">
+          <button class="btn good" id="exportBtn" type="button">Exportar JSON</button>
+          <button class="btn bad" id="deleteAllBtn" type="button">Borrar todo</button>
+        </div>
+
+        <label style="margin-top:12px">Importar respaldo</label>
+        <input type="file" id="importFile" accept=".json">
+        <div class="small" id="importMsg" style="margin-top:8px"></div>
+      </div>
+
+      <div class="card">
+        <h2>Crédito, licencia y acerca de</h2>
+        <div class="small">
+          <strong>Brújula Emocional</strong> es una herramienta de registro personal y bienestar con autoría visible.
+        </div>
+        <div class="small" style="margin-top:8px">
+          <strong>Autora / adaptación y desarrollo visual:</strong><br>
+          Claudia Alejandra Garza Hernández
+        </div>
+        <div class="small" style="margin-top:8px">
+          <strong>Uso sugerido:</strong> personal, educativo y de acompañamiento emocional.
+        </div>
+        <div class="small" style="margin-top:8px">
+          <strong>Protección de autoría:</strong> no retirar créditos, aviso de licencia ni referencia de autora en copias o adaptaciones.
+        </div>
+        <div class="row" style="margin-top:12px">
+          <button class="btn soft" id="aboutBtn" type="button">Acerca de…</button>
+          <button class="btn soft" id="licenseBtn" type="button">Licencia</button>
+        </div>
+      </div>
+
+      <div class="card">
+        <h2>Importante</h2>
+        <div class="small" style="line-height:1.6">
+          Esta herramienta ayuda a observar emociones, patrones y estrategias de cuidado.
+          No sustituye apoyo profesional. La sección de medicación es solo un apoyo de seguimiento personal para tratamientos ya prescritos.
+        </div>
+      </div>
+    </aside>
+  </div>
+</main>
+
+<div class="footer">
+  <span class="footer-brand">Brújula Emocional</span> · guardado local en este dispositivo · © Claudia Alejandra Garza Hernández
 </div>
-<div class="card">
 
-<h3>Registrar emoción</h3>
-
-<label>Emoción</label>
-
-<select id="emotion">
-
-<option>Feliz</option>
-<option>Triste</option>
-<option>Ansiosa</option>
-<option>Enojada</option>
-<option>Calma</option>
-<option>Cansada</option>
-
-</select>
-
-<label>Notas</label>
-
-<textarea id="note"></textarea>
-
-<button onclick="guardarRegistro()">
-Guardar registro
-</button>
-
+<div class="welcomeOverlay" id="welcomeOverlay">
+  <div class="welcomeCard">
+    <div class="welcomeTitle">Bienvenida a Brújula Emocional</div>
+    <div class="welcomeText">
+      Esta app te ayuda a registrar emociones, notar patrones y reconocer qué cosas sí te ayudan.
+      Todo se guarda en este dispositivo.
+    </div>
+    <ul class="listClean">
+      <li>Puedes elegir temas de color.</li>
+      <li>Puedes guardar, exportar e importar tus registros.</li>
+      <li>Incluye tendencia emocional, recordatorio local y modo discreto.</li>
+      <li>Ahora también puede ayudarte a dar seguimiento a medicación prescrita.</li>
+      <li>La autoría y la licencia permanecen visibles.</li>
+    </ul>
+    <div class="row" style="margin-top:16px">
+      <button class="btn main" id="closeWelcomeBtn" type="button">Comenzar</button>
+    </div>
+  </div>
 </div>
-<div class="card">
 
-<h3>Herramientas</h3>
-
-<button onclick="mostrarGrafica()">
-📊 gráfica semanal
-</button>
-
-<button onclick="detectarPatrones()">
-🧠 detectar patrones
-</button>
-
-<button onclick="exportarPDF()">
-📄 exportar a PDF
-</button>
-
-<button onclick="backupDatos()">
-🔒 copia de seguridad
-</button>
-
-<input type="file" id="restoreFile" onchange="restaurarBackup(event)">
-
+<div class="modal" id="aboutModal">
+  <div class="modalCard">
+    <h2>Acerca de Brújula Emocional</h2>
+    <div class="small" style="line-height:1.7">
+      Brújula Emocional es una app pensada para adolescentes y adultos que desean registrar emociones,
+      reconocer detonantes, observar el cuerpo, anotar estrategias de cuidado y revisar tendencias de bienestar.
+      <br><br>
+      Incluye apoyo de seguimiento local para medicación prescrita, sin sustituir indicaciones médicas.
+      <br><br>
+      Fue adaptada y desarrollada visualmente por <strong>Claudia Alejandra Garza Hernández</strong>,
+      con enfoque de uso personal y educativo.
+    </div>
+    <div class="row" style="margin-top:14px">
+      <button class="btn main" id="closeAboutBtn" type="button">Cerrar</button>
+    </div>
+  </div>
 </div>
-<div class="card">
 
-<h3>💊 Medicación</h3>
-
-<input id="medNombre" placeholder="Medicamento">
-
-<input id="medHora" type="time">
-
-<button onclick="guardarMedicacion()">
-Guardar medicamento
-</button>
-
-<ul id="listaMedicacion"></ul>
-
+<div class="modal" id="licenseModal">
+  <div class="modalCard">
+    <h2>Licencia y protección de autoría</h2>
+    <div class="small" style="line-height:1.7">
+      Esta app conserva autoría visible y crédito de adaptación/desarrollo visual para:
+      <br><br>
+      <strong>Claudia Alejandra Garza Hernández</strong>
+      <br><br>
+      Condiciones de uso sugeridas:
+      <br>
+      1. Puede utilizarse con fines personales y educativos.<br>
+      2. No debe eliminarse el crédito de autora ni el bloque de licencia/acerca de.<br>
+      3. Si se adapta o comparte, debe mantenerse la atribución visible.<br>
+      4. No implica sustitución de atención profesional en salud mental ni recomendaciones farmacológicas.
+      <br><br>
+      Identificador interno de licencia:
+      <div class="codebox">BE-CA-GH-2026</div>
+    </div>
+    <div class="row" style="margin-top:14px">
+      <button class="btn main" id="closeLicenseBtn" type="button">Cerrar</button>
+    </div>
+  </div>
 </div>
-<div class="card">
 
-<h3>Gráfica emocional</h3>
-
-<canvas id="graficaEmociones"></canvas>
-
-</div>
 <script>
-
-const DATA_KEY="brujula_emocional_v8"
-
-function loadData(){
-
-return JSON.parse(localStorage.getItem(DATA_KEY)||"[]")
-
-}
-
-function saveData(data){
-
-localStorage.setItem(DATA_KEY,JSON.stringify(data))
-
-}
-
-function guardarRegistro(){
-
-const emotion=document.getElementById("emotion").value
-
-const note=document.getElementById("note").value
-
-const data=loadData()
-
-data.push({
-
-date:new Date().toISOString(),
-
-emotion:emotion,
-
-note:note
-
-})
-
-saveData(data)
-
-alert("registro guardado")
-
-}
-function mostrarGrafica(){
-
-const data=loadData()
-
-const conteo={}
-
-data.forEach(e=>{
-
-const fecha=new Date(e.date).toLocaleDateString()
-
-if(!conteo[fecha]) conteo[fecha]=0
-
-conteo[fecha]++
-
-})
-
-const labels=Object.keys(conteo)
-
-const valores=Object.values(conteo)
-
-new Chart(
-
-document.getElementById("graficaEmociones"),
-
-{
-
-type:"bar",
-
-data:{
-
-labels:labels,
-
-datasets:[{
-
-label:"registros",
-
-data:valores
-
-}]
-
-}
-
-}
-
-)
-
-}
-function detectarPatrones(){
-
-const data=loadData()
-
-if(data.length<5){
-
-alert("necesitas más registros")
-
-return
-
-}
-
-const conteo={}
-
-data.forEach(e=>{
-
-if(!conteo[e.emotion]) conteo[e.emotion]=0
-
-conteo[e.emotion]++
-
-})
-
-let mayor=0
-let dominante=""
-
-for(let emo in conteo){
-
-if(conteo[emo]>mayor){
-
-mayor=conteo[emo]
-
-dominante=emo
-
-}
-
-}
-
-alert("la emoción más frecuente es: "+dominante)
-
-}
-function exportarPDF(){
-
-const {jsPDF}=window.jspdf
-
-const doc=new jsPDF()
-
-const data=loadData()
-
-let y=10
-
-doc.text("Brújula emocional",10,y)
-
-y+=10
-
-data.forEach(e=>{
-
-doc.text(e.date+" "+e.emotion,10,y)
-
-y+=10
-
-})
-
-doc.save("brujula.pdf")
-
-}
-function backupDatos(){
-
-const data=localStorage.getItem(DATA_KEY)
-
-const blob=new Blob([data],{type:"application/json"})
-
-const url=URL.createObjectURL(blob)
-
-const a=document.createElement("a")
-
-a.href=url
-
-a.download="backup_brujula.json"
-
-a.click()
-
-}
-
-function restaurarBackup(event){
-
-const file=event.target.files[0]
-
-const reader=new FileReader()
-
-reader.onload=function(e){
-
-localStorage.setItem(DATA_KEY,e.target.result)
-
-alert("backup restaurado")
-
-location.reload()
-
-}
-
-reader.readAsText(file)
-
-}
-function guardarMedicacion(){
-
-const nombre=medNombre.value
-
-const hora=medHora.value
-
-const meds=JSON.parse(localStorage.getItem("medicacion")||"[]")
-
-meds.push({nombre,hora})
-
-localStorage.setItem("medicacion",JSON.stringify(meds))
-
-cargarMedicacion()
-
-}
-
-function cargarMedicacion(){
-
-const meds=JSON.parse(localStorage.getItem("medicacion")||"[]")
-
-listaMedicacion.innerHTML=""
-
-meds.forEach(m=>{
-
-const li=document.createElement("li")
-
-li.textContent=m.nombre+" - "+m.hora
-
-listaMedicacion.appendChild(li)
-
-})
-
-}
-
-cargarMedicacion()
-
+(() => {
+  const APP_VERSION = "v7.0-estable";
+  const DATA_KEY = "brujula_emocional_v7";
+  const THEME_KEY = "brujula_emocional_theme";
+  const FIRST_KEY = "brujula_emocional_first_open";
+  const REMINDER_ENABLED_KEY = "brujula_emocional_reminder_enabled";
+  const REMINDER_TIME_KEY = "brujula_emocional_reminder_time";
+  const REMINDER_LAST_KEY = "brujula_emocional_last_reminder";
+  const DISCREET_KEY = "brujula_emocional_discreet";
+  const MED_KEY = "brujula_emocional_medication_multi";
+  const MED_LOG_KEY = "brujula_emocional_medication_log_multi";
+  const MED_ALERT_LAST_KEY = "brujula_emocional_medication_alert_last";
+  const OLD_MED_KEY = "brujula_emocional_medication";
+  const OLD_MED_LOG_KEY = "brujula_emocional_medication_log";
+
+  const quotesByEmotion = {
+    calma: ["Puedo seguir cuidando esta paz.","La calma también merece espacio.","No tengo que estar mal para escucharme."],
+    alegria: ["También puedo registrar los días buenos.","La alegría también cuenta.","Reconocer lo bueno fortalece mi equilibrio."],
+    estres: ["Puedo ir una cosa a la vez.","No todo se resuelve hoy.","Una pausa también es avanzar."],
+    tristeza: ["Lo que siento merece ternura, no castigo.","Puedo estar triste sin dejar de cuidarme.","No tengo que apurar mi proceso."],
+    enojo: ["Puedo sentir enojo sin dañarme ni dañar.","Respirar antes de reaccionar también es fuerza.","Mi emoción tiene un mensaje, no una orden."],
+    ansiedad: ["Puedo sentir esto sin obedecer a la urgencia.","La ansiedad sube y baja; yo puedo acompañarme.","Primero respiro, luego decido."],
+    miedo: ["Puedo darme seguridad paso a paso.","No necesito tener todo resuelto para seguir.","Mi cuerpo merece calma mientras mi mente se aclara."],
+    frustracion: ["Lo difícil no significa que yo esté fallando.","Puedo reajustar, no rendirme.","Hoy avanzo como puedo."],
+    culpa: ["Puedo revisar mis actos sin destruirme.","Aprender vale más que castigarme.","Cometer errores no borra mi valor."],
+    verguenza: ["Puedo hablarme con más respeto.","Mi valor no desaparece por un momento difícil.","No necesito esconderme para merecer cuidado."],
+    soledad: ["Puedo acompañarme mientras busco conexión.","Sentirme sola/o no significa que no importe.","Pedir compañía también es valentía."],
+    confusion: ["No entender todo hoy también está permitido.","Puedo ir aclarando una cosa a la vez.","La claridad no siempre llega de golpe."],
+    esperanza: ["La esperanza también necesita cuidado.","Puedo confiar sin dejar de observarme.","Esto puede mejorar paso a paso."],
+    otro: ["Lo que siento merece atención.","Puedo darme un poco de amabilidad hoy.","Escucharme ya es una forma de cuidado."]
+  };
+
+  const generalQuotes = [
+    "Puedo sentir esto sin juzgarme.",
+    "No necesito resolver todo en este momento.",
+    "Nombrar lo que siento ya es una forma de cuidarme.",
+    "Una emoción intensa no dura para siempre.",
+    "Puedo pausar antes de reaccionar.",
+    "Hoy no necesito ser perfecta/o, solo honesta/o conmigo."
+  ];
+
+  let deferredInstallPrompt = null;
+  let medDraftItems = [];
+
+  const $ = (id) => document.getElementById(id);
+
+  const ui = {
+    date: $("date"), time: $("time"), profile: $("profile"), area: $("area"),
+    emotion: $("emotion"), intensity: $("intensity"), energy: $("energy"),
+    trigger: $("trigger"), thoughts: $("thoughts"), helped: $("helped"),
+    support: $("support"), note: $("note"), saveBtn: $("saveBtn"),
+    quickBtn: $("quickBtn"), clearBtn: $("clearBtn"), saveMsg: $("saveMsg"),
+    todayPill: $("todayPill"), weekPill: $("weekPill"), countPill: $("countPill"),
+    todayTable: $("todayTable"), historyTable: $("historyTable"),
+    quote: $("quote"), quoteSub: $("quoteSub"), newQuoteBtn: $("newQuoteBtn"),
+    wkCount: $("wkCount"), wkAvg: $("wkAvg"), wkHelped: $("wkHelped"),
+    weekTable: $("weekTable"), insightBox: $("insightBox"),
+    exportBtn: $("exportBtn"), deleteAllBtn: $("deleteAllBtn"),
+    importFile: $("importFile"), importMsg: $("importMsg"),
+    moodBtns: [...document.querySelectorAll(".moodBtn")],
+    bodyChips: [...document.querySelectorAll("#bodyChips .chip")],
+    careChips: [...document.querySelectorAll("#careChips .chip")],
+    themeBtns: [...document.querySelectorAll(".themeBtn")],
+    weekChart: $("weekChart"), reflect1: $("reflect1"), reflect2: $("reflect2"), reflect3: $("reflect3"),
+    heroToday: $("heroToday"), heroWeekAvg: $("heroWeekAvg"), heroEmotion: $("heroEmotion"), heroTheme: $("heroTheme"),
+    welcomeOverlay: $("welcomeOverlay"), closeWelcomeBtn: $("closeWelcomeBtn"),
+    aboutBtn: $("aboutBtn"), licenseBtn: $("licenseBtn"),
+    aboutModal: $("aboutModal"), licenseModal: $("licenseModal"),
+    closeAboutBtn: $("closeAboutBtn"), closeLicenseBtn: $("closeLicenseBtn"),
+    trendBadge: $("trendBadge"),
+    reminderToggle: $("reminderToggle"),
+    reminderTime: $("reminderTime"),
+    reminderMsg: $("reminderMsg"),
+    reminderStatus: $("reminderStatus"),
+    discreetToggle: $("discreetToggle"),
+    discreetStatus: $("discreetStatus"),
+
+    medEnabled: $("medEnabled"),
+    medName: $("medName"),
+    medDose: $("medDose"),
+    medFrequency: $("medFrequency"),
+    medTime1: $("medTime1"),
+    medTime2: $("medTime2"),
+    medTime3: $("medTime3"),
+    medExtraTimesRow: $("medExtraTimesRow"),
+    medThirdWrap: $("medThirdWrap"),
+    medNotes: $("medNotes"),
+    addMedBtn: $("addMedBtn"),
+    saveMedBtn: $("saveMedBtn"),
+    medFormWrap: $("medFormWrap"),
+    medTodaySummary: $("medTodaySummary"),
+    medDailyCards: $("medDailyCards"),
+    medAlertBadge: $("medAlertBadge"),
+    medDraftList: $("medDraftList"),
+
+    installBtn: $("installBtn"),
+    installMsg: $("installMsg")
+  };
+
+  function storageDisponible() {
+    try {
+      const testKey = "__test_storage__";
+      localStorage.setItem(testKey, "ok");
+      const value = localStorage.getItem(testKey);
+      localStorage.removeItem(testKey);
+      return value === "ok";
+    } catch (e) {
+      console.error("Storage no disponible:", e);
+      return false;
+    }
+  }
+
+  function migrateOldDataIfNeeded(){
+    const current = localStorage.getItem(DATA_KEY);
+    if(current) return;
+
+    const oldKeys = [
+      "brujula_emocional_v6",
+      "brujula_emocional_v5",
+      "brujula_emocional_v4",
+      "brujula_emocional"
+    ];
+
+    for(const key of oldKeys){
+      const oldData = localStorage.getItem(key);
+      if(!oldData) continue;
+      try{
+        const parsed = JSON.parse(oldData);
+        if(Array.isArray(parsed)){
+          localStorage.setItem(DATA_KEY, JSON.stringify(parsed));
+          console.log("Migración de datos completada desde:", key);
+          break;
+        }
+      }catch(e){
+        console.error("Error migrando datos desde:", key, e);
+      }
+    }
+  }
+
+  function todayISO(d = new Date()){
+    const y = d.getFullYear();
+    const m = String(d.getMonth()+1).padStart(2,"0");
+    const day = String(d.getDate()).padStart(2,"0");
+    return `${y}-${m}-${day}`;
+  }
+
+  function nowTime(){
+    const d = new Date();
+    return `${String(d.getHours()).padStart(2,"0")}:${String(d.getMinutes()).padStart(2,"0")}`;
+  }
+
+  function timeToMinutes(t){
+    if(!t || !t.includes(":")) return null;
+    const [h,m] = t.split(":").map(Number);
+    if(!Number.isFinite(h) || !Number.isFinite(m)) return null;
+    return h*60+m;
+  }
+
+  function clamp010(n){
+    n = Number(n);
+    if(!Number.isFinite(n)) return 0;
+    return Math.max(0, Math.min(10, n));
+  }
+
+  function avg(list){
+    if(!list.length) return null;
+    return list.reduce((a,b)=>a+b,0) / list.length;
+  }
+
+  function safeId(){
+    return (window.crypto && crypto.randomUUID) ? crypto.randomUUID() : String(Date.now() + Math.random());
+  }
+
+  function loadData(){
+    try{
+      const parsed = JSON.parse(localStorage.getItem(DATA_KEY) || "[]");
+      return Array.isArray(parsed) ? parsed : [];
+    }catch(e){
+      console.error("Error leyendo datos:", e);
+      return [];
+    }
+  }
+
+  function saveData(data){
+    try{
+      localStorage.setItem(DATA_KEY, JSON.stringify(data));
+      console.log("Datos guardados:", data.length);
+    }catch(e){
+      console.error("Error al guardar en localStorage:", e);
+      alert("No se pudo guardar la información en este navegador.");
+    }
+  }
+
+  function normalizeMedication(raw){
+    if(!raw) return { enabled:false, items:[] };
+
+    if(Array.isArray(raw.items)){
+      return {
+        enabled: !!raw.enabled && raw.items.length > 0,
+        items: raw.items.map(item => ({
+          id: item.id || safeId(),
+          name: item.name || "",
+          dose: item.dose || "",
+          frequency: Number(item.frequency || (Array.isArray(item.times) ? item.times.length : 1)) || 1,
+          times: Array.isArray(item.times) ? item.times.filter(Boolean) : [],
+          notes: item.notes || ""
+        })).filter(item => item.name && item.dose && item.times.length)
+      };
+    }
+
+    if(raw.name || raw.dose || raw.times){
+      return {
+        enabled: !!raw.enabled,
+        items: [{
+          id: safeId(),
+          name: raw.name || "",
+          dose: raw.dose || "",
+          frequency: Number(raw.frequency || (Array.isArray(raw.times) ? raw.times.length : 1)) || 1,
+          times: Array.isArray(raw.times) ? raw.times.filter(Boolean) : [],
+          notes: raw.notes || ""
+        }].filter(item => item.name && item.dose && item.times.length)
+      };
+    }
+
+    return { enabled:false, items:[] };
+  }
+
+  function migrateOldMedicationIfNeeded(){
+    const existing = localStorage.getItem(MED_KEY);
+    if(existing) return;
+
+    const oldMed = localStorage.getItem(OLD_MED_KEY);
+    const oldLog = localStorage.getItem(OLD_MED_LOG_KEY);
+
+    if(oldMed){
+      try{
+        const parsed = JSON.parse(oldMed);
+        saveMedication(normalizeMedication(parsed));
+      }catch(e){
+        console.error("Error migrando medicación antigua:", e);
+      }
+    }
+
+    if(oldLog){
+      try{
+        const parsedLog = JSON.parse(oldLog);
+        if(parsedLog && typeof parsedLog === "object"){
+          const normalizedLog = {};
+          Object.keys(parsedLog).forEach(date => {
+            normalizedLog[date] = {};
+            const day = parsedLog[date] || {};
+            Object.keys(day).forEach(timeKey => {
+              normalizedLog[date].legacy_single_med = normalizedLog[date].legacy_single_med || {};
+              normalizedLog[date].legacy_single_med[timeKey] = day[timeKey];
+            });
+          });
+          saveMedLog(normalizedLog);
+        }
+      }catch(e){
+        console.error("Error migrando bitácora antigua:", e);
+      }
+    }
+  }
+
+  function loadMedication(){
+    try{
+      const parsed = JSON.parse(localStorage.getItem(MED_KEY) || "null");
+      return normalizeMedication(parsed);
+    }catch(e){
+      console.error("Error leyendo medicación:", e);
+      return { enabled:false, items:[] };
+    }
+  }
+
+  function saveMedication(data){
+    const normalized = normalizeMedication(data);
+    normalized.enabled = normalized.items.length > 0 ? !!data.enabled : false;
+    try{
+      localStorage.setItem(MED_KEY, JSON.stringify(normalized));
+    }catch(e){
+      console.error("Error al guardar medicación:", e);
+      alert("No se pudo guardar la medicación en este dispositivo.");
+    }
+  }
+
+  function loadMedLog(){
+    try{
+      const parsed = JSON.parse(localStorage.getItem(MED_LOG_KEY) || "{}");
+      return parsed && typeof parsed === "object" ? parsed : {};
+    }catch(e){
+      console.error("Error leyendo bitácora de medicación:", e);
+      return {};
+    }
+  }
+
+  function saveMedLog(data){
+    try{
+      localStorage.setItem(MED_LOG_KEY, JSON.stringify(data));
+    }catch(e){
+      console.error("Error al guardar bitácora de medicación:", e);
+      alert("No se pudo guardar el seguimiento de medicación.");
+    }
+  }
+
+  function escapeHtml(str){
+    return String(str || "")
+      .replaceAll("&","&amp;")
+      .replaceAll("<","&lt;")
+      .replaceAll(">","&gt;")
+      .replaceAll('"',"&quot;")
+      .replaceAll("'","&#39;");
+  }
+
+  function selectedKeys(list){
+    return list.filter(x => x.dataset.on === "1").map(x => x.dataset.key);
+  }
+
+  function resetChips(list){
+    list.forEach(x => x.dataset.on = "0");
+  }
+
+  function showMsg(text, ms = 1600){
+    ui.saveMsg.textContent = text;
+    setTimeout(() => ui.saveMsg.textContent = "", ms);
+  }
+
+  function getSelectedMood(){
+    const active = ui.moodBtns.find(b => b.classList.contains("active"));
+    return active ? active.dataset.mood : "calma";
+  }
+
+  function lastNDaysISO(n){
+    const out = [];
+    const base = new Date();
+    for(let i=0; i<n; i++){
+      const d = new Date(base);
+      d.setDate(base.getDate() - i);
+      out.push(todayISO(d));
+    }
+    return out.reverse();
+  }
+
+  function mostFrequent(arr){
+    if(!arr.length) return "—";
+    const map = {};
+    arr.forEach(v => map[v] = (map[v] || 0) + 1);
+    return Object.entries(map).sort((a,b)=>b[1]-a[1])[0][0];
+  }
+
+  function themeLabel(theme){
+    return {
+      noche:"Noche",
+      orquidea:"Orquídea",
+      cielo:"Cielo",
+      bosque:"Bosque",
+      aurora:"Aurora",
+      vino:"Vino"
+    }[theme] || theme;
+  }
+
+  function setTheme(theme){
+    document.body.classList.remove(
+      "theme-noche","theme-orquidea","theme-cielo","theme-bosque","theme-aurora","theme-vino"
+    );
+    document.body.classList.add(`theme-${theme}`);
+    localStorage.setItem(THEME_KEY, theme);
+    ui.themeBtns.forEach(btn => btn.classList.toggle("active", btn.dataset.theme === theme));
+    ui.heroTheme.textContent = themeLabel(theme);
+    const accent = getComputedStyle(document.body).getPropertyValue("--accent").trim() || "#7c3aed";
+    const meta = document.querySelector('meta[name="theme-color"]');
+    if(meta) meta.setAttribute("content", accent);
+    drawWeekChart(loadData());
+  }
+
+  function initTheme(){
+    const saved = localStorage.getItem(THEME_KEY) || "noche";
+    setTheme(saved);
+    ui.themeBtns.forEach(btn => btn.addEventListener("click", () => setTheme(btn.dataset.theme)));
+  }
+
+  function initMoodButtons(){
+    ui.moodBtns.forEach(btn => {
+      btn.addEventListener("click", () => {
+        ui.moodBtns.forEach(b => b.classList.remove("active"));
+        btn.classList.add("active");
+        ui.emotion.value = btn.dataset.mood;
+        setQuoteForEmotion(btn.dataset.mood);
+      });
+    });
+  }
+
+  function syncMoodFromEmotion(){
+    const mood = ui.emotion.value;
+    let found = false;
+    ui.moodBtns.forEach(btn => {
+      const on = btn.dataset.mood === mood;
+      btn.classList.toggle("active", on);
+      if(on) found = true;
+    });
+    setQuoteForEmotion(mood);
+    if(!found) ui.moodBtns.forEach(btn => btn.classList.remove("active"));
+  }
+
+  function setQuoteForEmotion(emotion){
+    const list = quotesByEmotion[emotion] || generalQuotes;
+    const text = list[Math.floor(Math.random() * list.length)];
+    ui.quote.textContent = `“${text}”`;
+    ui.quoteSub.textContent = `Frase sugerida para la emoción: ${emotion}.`;
+  }
+
+  function randomGeneralQuote(){
+    const text = generalQuotes[Math.floor(Math.random() * generalQuotes.length)];
+    ui.quote.textContent = `“${text}”`;
+    ui.quoteSub.textContent = "Úsala como una pausa breve.";
+  }
+
+  function addEntry(entry){
+    const data = loadData();
+    data.push(entry);
+    saveData(data);
+    renderAll();
+  }
+
+  function makeEntry(quick = false){
+    return {
+      id: safeId(),
+      createdAt: new Date().toISOString(),
+      date: ui.date.value || todayISO(),
+      time: quick ? nowTime() : (ui.time.value || nowTime()),
+      profile: ui.profile.value,
+      area: ui.area.value,
+      emotion: quick ? getSelectedMood() : ui.emotion.value,
+      intensity: clamp010(ui.intensity.value),
+      energy: clamp010(ui.energy.value),
+      trigger: quick ? "" : ui.trigger.value.trim(),
+      thoughts: quick ? "" : ui.thoughts.value.trim(),
+      body: quick ? [] : selectedKeys(ui.bodyChips),
+      care: quick ? ["pausa"] : selectedKeys(ui.careChips),
+      helped: ui.helped.value,
+      support: ui.support.value,
+      note: quick ? "Registro breve guardado." : ui.note.value.trim()
+    };
+  }
+
+  function clearForm(){
+    ui.date.value = todayISO();
+    ui.time.value = nowTime();
+    ui.profile.value = "adulto";
+    ui.area.value = "escuela";
+    ui.emotion.value = "calma";
+    ui.intensity.value = 5;
+    ui.energy.value = 5;
+    ui.trigger.value = "";
+    ui.thoughts.value = "";
+    ui.helped.value = "si";
+    ui.support.value = "no";
+    ui.note.value = "";
+    resetChips(ui.bodyChips);
+    resetChips(ui.careChips);
+    ui.moodBtns.forEach(btn => btn.classList.remove("active"));
+    const calmBtn = ui.moodBtns.find(btn => btn.dataset.mood === "calma");
+    if(calmBtn) calmBtn.classList.add("active");
+    setQuoteForEmotion("calma");
+  }
+
+  function deleteEntry(id){
+    const data = loadData().filter(item => item.id !== id);
+    saveData(data);
+    renderAll();
+  }
+
+  function renderHeader(data){
+    const today = todayISO();
+    ui.todayPill.textContent = `Hoy: ${today}`;
+    const days = lastNDaysISO(7);
+    ui.weekPill.textContent = `Semana: ${days[0]} → ${days[6]}`;
+    ui.countPill.textContent = `Total: ${data.length}`;
+  }
+
+  function renderHero(data){
+    const today = todayISO();
+    const todayCount = data.filter(e => e.date === today).length;
+    const last7 = lastNDaysISO(7);
+    const recent = data.filter(e => last7.includes(e.date));
+    const allInt = recent.map(e => Number(e.intensity)).filter(Number.isFinite);
+    ui.heroToday.textContent = todayCount;
+    ui.heroWeekAvg.textContent = allInt.length ? avg(allInt).toFixed(1) : "—";
+    ui.heroEmotion.textContent = mostFrequent(recent.map(e => e.emotion).filter(Boolean));
+  }
+
+  function renderToday(data){
+    const today = todayISO();
+    const rows = data.filter(e => e.date === today).sort((a,b)=>(a.time || "").localeCompare(b.time || ""));
+    ui.todayTable.innerHTML = "";
+    if(!rows.length){
+      ui.todayTable.innerHTML = `<tr><td colspan="6" class="empty">Aún no hay registros para hoy.</td></tr>`;
+      return;
+    }
+    rows.slice().reverse().forEach(e => {
+      ui.todayTable.innerHTML += `
+        <tr>
+          <td>${escapeHtml(e.time || "—")}</td>
+          <td>${escapeHtml(e.area || "—")}</td>
+          <td>${escapeHtml(e.emotion || "—")}</td>
+          <td>${escapeHtml(e.intensity ?? "—")}</td>
+          <td>${escapeHtml(e.helped || "—")}</td>
+          <td>${escapeHtml(e.support || "—")}</td>
+        </tr>
+      `;
+    });
+  }
+
+  function renderHistory(data){
+    const rows = data.slice().sort((a,b)=>{
+      const aa = `${a.date || ""} ${a.time || ""}`;
+      const bb = `${b.date || ""} ${b.time || ""}`;
+      return bb.localeCompare(aa);
+    }).slice(0,20);
+
+    ui.historyTable.innerHTML = "";
+    if(!rows.length){
+      ui.historyTable.innerHTML = `<tr><td colspan="7" class="empty">No hay historial todavía.</td></tr>`;
+      return;
+    }
+
+    rows.forEach(e => {
+      const note = e.note || e.trigger || e.thoughts || "—";
+      ui.historyTable.innerHTML += `
+        <tr>
+          <td>${escapeHtml(e.date || "—")}</td>
+          <td>${escapeHtml(e.time || "—")}</td>
+          <td>${escapeHtml(e.area || "—")}</td>
+          <td>${escapeHtml(e.emotion || "—")}</td>
+          <td>${escapeHtml(e.intensity ?? "—")}</td>
+          <td>${escapeHtml(note)}</td>
+          <td><button class="btn sec" data-del="${escapeHtml(e.id)}" type="button" style="padding:6px 10px;font-size:12px">Eliminar</button></td>
+        </tr>
+      `;
+    });
+
+    [...document.querySelectorAll("[data-del]")].forEach(btn => {
+      btn.addEventListener("click", () => deleteEntry(btn.dataset.del));
+    });
+  }
+
+  function computeTrend(data){
+    const days = lastNDaysISO(7);
+    const recent4 = days.slice(-4);
+    const prev3 = days.slice(0,3);
+
+    const avgBlock = (arrDates) => {
+      const values = data
+        .filter(e => arrDates.includes(e.date))
+        .map(e => Number(e.intensity))
+        .filter(Number.isFinite);
+      return values.length ? avg(values) : null;
+    };
+
+    const prevAvg = avgBlock(prev3);
+    const recentAvg = avgBlock(recent4);
+
+    if(prevAvg == null || recentAvg == null){
+      return { label:"Insuficiente", cls:"tendency-flat" };
+    }
+
+    const diff = recentAvg - prevAvg;
+    if(diff >= 0.8) return { label:"Subiendo ↑", cls:"tendency-up" };
+    if(diff <= -0.8) return { label:"Bajando ↓", cls:"tendency-down" };
+    return { label:"Estable →", cls:"tendency-flat" };
+  }
+
+  function renderWeek(data){
+    const days = lastNDaysISO(7);
+    let weekCount = 0;
+    let helpedCount = 0;
+    const allIntensity = [];
+    ui.weekTable.innerHTML = "";
+    let any = false;
+
+    days.forEach(date => {
+      const entries = data.filter(e => e.date === date);
+      if(!entries.length) return;
+      any = true;
+      weekCount += entries.length;
+      helpedCount += entries.filter(e => e.helped === "si").length;
+      allIntensity.push(...entries.map(e => Number(e.intensity)).filter(Number.isFinite));
+
+      const dayAvg = avg(entries.map(e => Number(e.intensity)).filter(Number.isFinite));
+      const topEmotion = mostFrequent(entries.map(e => e.emotion).filter(Boolean));
+
+      ui.weekTable.innerHTML += `
+        <tr>
+          <td>${escapeHtml(date)}</td>
+          <td>${entries.length}</td>
+          <td>${dayAvg == null ? "—" : dayAvg.toFixed(1)}</td>
+          <td>${escapeHtml(topEmotion)}</td>
+        </tr>
+      `;
+    });
+
+    if(!any){
+      ui.weekTable.innerHTML = `<tr><td colspan="4" class="empty">Aún no hay datos semanales.</td></tr>`;
+    }
+
+    const weekAvg = avg(allIntensity);
+    ui.wkCount.textContent = weekCount || 0;
+    ui.wkAvg.textContent = weekAvg == null ? "—" : weekAvg.toFixed(1);
+    ui.wkHelped.textContent = helpedCount || 0;
+
+    const trend = computeTrend(data);
+    ui.trendBadge.textContent = trend.label;
+    ui.trendBadge.className = `v discreet-safe ${trend.cls}`;
+
+    renderInsight(data, weekCount, weekAvg, helpedCount);
+    renderReflections(data);
+  }
+
+  function renderInsight(data, weekCount, weekAvg, helpedCount){
+    const range = lastNDaysISO(7);
+    const recent = data.filter(e => range.includes(e.date));
+
+    if(!recent.length){
+      ui.insightBox.textContent = "Tu lectura semanal aparecerá aquí cuando guardes registros.";
+      return;
+    }
+
+    const topEmotion = mostFrequent(recent.map(e => e.emotion).filter(Boolean));
+    const topArea = mostFrequent(recent.map(e => e.area).filter(Boolean));
+    const topCare = mostFrequent(recent.flatMap(e => Array.isArray(e.care) ? e.care : []));
+    const supportNeed = recent.filter(e => e.support === "si_hoy" || e.support === "si_pronto").length;
+
+    let text = `En los últimos 7 días registraste ${weekCount} momento(s). `;
+    text += `La emoción más frecuente fue "${topEmotion}" y el área más repetida fue "${topArea}". `;
+    if(topCare !== "—") text += `La estrategia de cuidado más usada fue "${topCare}". `;
+    if(weekAvg != null){
+      if(weekAvg >= 7){
+        text += `La intensidad promedio fue alta (${weekAvg.toFixed(1)}), así que conviene priorizar descanso, apoyo y pausas más claras. `;
+      } else if(weekAvg >= 4){
+        text += `La intensidad promedio fue media (${weekAvg.toFixed(1)}), lo cual sugiere malestar manejable si mantienes constancia. `;
+      } else {
+        text += `La intensidad promedio fue baja (${weekAvg.toFixed(1)}), señal de una semana más estable. `;
+      }
+    }
+    if(supportNeed > 0){
+      text += `Marcaste necesidad de apoyo adicional ${supportNeed} vez/veces. Tómalo en serio.`;
+    } else if(helpedCount > 0){
+      text += `También hubo momentos en los que tus estrategias sí ayudaron.`;
+    }
+    ui.insightBox.textContent = text;
+  }
+
+  function renderReflections(data){
+    const today = todayISO();
+    const todayEntries = data.filter(e => e.date === today);
+    const last7 = lastNDaysISO(7);
+    const recent = data.filter(e => last7.includes(e.date));
+
+    const bestCare = mostFrequent(todayEntries.flatMap(e => Array.isArray(e.care) ? e.care : []));
+    const topEmotion = mostFrequent(recent.map(e => e.emotion).filter(Boolean));
+    const needs = recent.filter(e => e.helped === "no").length;
+    const topArea = mostFrequent(recent.map(e => e.area).filter(Boolean));
+
+    ui.reflect1.textContent = bestCare === "—" ? "Todavía no hay una estrategia destacada hoy." : `Lo que más aparece hoy es: ${bestCare}.`;
+    ui.reflect2.textContent = topEmotion === "—" ? "Aún no hay suficientes datos." : `La emoción que más se repite es: ${topEmotion}.`;
+    ui.reflect3.textContent = recent.length === 0
+      ? "Registra un par de días para recibir sugerencias más útiles."
+      : needs >= 2
+        ? `Tal vez mañana convenga probar una pausa más clara o pedir apoyo en el área: ${topArea}.`
+        : "Mañana puedes repetir la estrategia que más te ayudó hoy y registrar cómo te fue.";
+  }
+
+  function drawWeekChart(data){
+    const canvas = ui.weekChart;
+    if(!canvas) return;
+    const ctx = canvas.getContext("2d");
+    const w = canvas.width;
+    const h = canvas.height;
+    ctx.clearRect(0,0,w,h);
+
+    const styles = getComputedStyle(document.body);
+    const text = styles.getPropertyValue("--text").trim();
+    const muted = styles.getPropertyValue("--muted").trim();
+    const line = styles.getPropertyValue("--line").trim();
+    const accent = styles.getPropertyValue("--accent").trim();
+    const chip = styles.getPropertyValue("--chip").trim();
+
+    ctx.fillStyle = chip;
+    ctx.fillRect(0,0,w,h);
+
+    const pad = {left:38,right:16,top:16,bottom:34};
+    const cw = w - pad.left - pad.right;
+    const ch = h - pad.top - pad.bottom;
+
+    ctx.strokeStyle = line;
+    ctx.lineWidth = 1;
+
+    for(let i=0;i<=5;i++){
+      const y = pad.top + (ch/5)*i;
+      ctx.beginPath();
+      ctx.moveTo(pad.left, y);
+      ctx.lineTo(w-pad.right, y);
+      ctx.stroke();
+    }
+
+    ctx.fillStyle = muted;
+    ctx.font = "11px system-ui";
+    for(let i=0;i<=5;i++){
+      const val = 10 - i*2;
+      const y = pad.top + (ch/5)*i + 4;
+      ctx.fillText(String(val), 8, y);
+    }
+
+    const days = lastNDaysISO(7);
+    const values = days.map(date => {
+      const entries = data.filter(e => e.date === date);
+      const vals = entries.map(e => Number(e.intensity)).filter(Number.isFinite);
+      return vals.length ? avg(vals) : null;
+    });
+
+    const stepX = cw / (days.length - 1);
+
+    ctx.strokeStyle = accent;
+    ctx.lineWidth = 3;
+    ctx.beginPath();
+
+    let started = false;
+    values.forEach((v, i) => {
+      if(v == null) return;
+      const x = pad.left + stepX*i;
+      const y = pad.top + ch - (v/10)*ch;
+      if(!started){
+        ctx.moveTo(x,y);
+        started = true;
+      } else {
+        ctx.lineTo(x,y);
+      }
+    });
+    ctx.stroke();
+
+    values.forEach((v, i) => {
+      const x = pad.left + stepX*i;
+      const label = days[i].slice(5);
+      ctx.fillStyle = muted;
+      ctx.font = "11px system-ui";
+      ctx.fillText(label, x-14, h-12);
+
+      if(v != null){
+        const y = pad.top + ch - (v/10)*ch;
+        ctx.beginPath();
+        ctx.fillStyle = accent;
+        ctx.arc(x,y,4,0,Math.PI*2);
+        ctx.fill();
+        ctx.fillStyle = text;
+        ctx.font = "10px system-ui";
+        ctx.fillText(v.toFixed(1), x-10, y-10);
+      }
+    });
+  }
+
+  function updateMedicationFrequencyUI(){
+    const freq = Number(ui.medFrequency.value || 1);
+    ui.medExtraTimesRow.style.display = freq >= 2 ? "flex" : "none";
+    ui.medThirdWrap.style.display = freq >= 3 ? "block" : "none";
+  }
+
+  function clearMedicationInputs(){
+    ui.medName.value = "";
+    ui.medDose.value = "";
+    ui.medFrequency.value = "1";
+    ui.medTime1.value = "";
+    ui.medTime2.value = "";
+    ui.medTime3.value = "";
+    ui.medNotes.value = "";
+    updateMedicationFrequencyUI();
+  }
+
+  function buildMedicationFromInputs(){
+    const frequency = Number(ui.medFrequency.value || 1);
+    const times = [ui.medTime1.value, ui.medTime2.value, ui.medTime3.value]
+      .slice(0, frequency)
+      .filter(Boolean);
+
+    return {
+      id: safeId(),
+      name: ui.medName.value.trim(),
+      dose: ui.medDose.value.trim(),
+      frequency,
+      times,
+      notes: ui.medNotes.value.trim()
+    };
+  }
+
+  function renderMedicationDraft(){
+    ui.medDraftList.innerHTML = "";
+
+    if(!medDraftItems.length){
+      ui.medDraftList.innerHTML = `<div class="small">Aún no has agregado medicamentos a la lista.</div>`;
+      return;
+    }
+
+    medDraftItems.forEach((item) => {
+      ui.medDraftList.innerHTML += `
+        <div class="med-row">
+          <div><strong>${escapeHtml(item.name)}</strong> · ${escapeHtml(item.dose)}</div>
+          <div class="small" style="margin-top:6px">Frecuencia: ${item.frequency} toma(s) al día</div>
+          <div class="small">Horarios: ${escapeHtml(item.times.join(", "))}</div>
+          <div class="small">${escapeHtml(item.notes || "Sin notas.")}</div>
+          <div class="row" style="margin-top:10px">
+            <button class="btn bad" type="button" data-remove-draft="${escapeHtml(item.id)}">Quitar</button>
+          </div>
+        </div>
+      `;
+    });
+
+    [...document.querySelectorAll("[data-remove-draft]")].forEach(btn => {
+      btn.addEventListener("click", () => {
+        medDraftItems = medDraftItems.filter(item => item.id !== btn.dataset.removeDraft);
+        renderMedicationDraft();
+      });
+    });
+  }
+
+  function toggleMedicationForm(){
+    const enabled = ui.medEnabled.checked;
+    ui.medFormWrap.style.display = enabled ? "block" : "none";
+
+    if(!enabled){
+      medDraftItems = [];
+      renderMedicationDraft();
+      saveMedication({ enabled:false, items:[] });
+      renderMedication();
+    }
+  }
+
+  function ensureTodayMedLog(medState){
+    const today = todayISO();
+    const log = loadMedLog();
+
+    if(!log[today]) log[today] = {};
+
+    const items = medState?.items || [];
+    items.forEach(item => {
+      if(!log[today][item.id]) log[today][item.id] = {};
+
+      item.times.forEach(t => {
+        if(!log[today][item.id][t]){
+          log[today][item.id][t] = {
+            scheduled: t,
+            status: "pendiente",
+            takenAt: ""
+          };
+        }
+      });
+
+      Object.keys(log[today][item.id]).forEach(timeKey => {
+        if(!item.times.includes(timeKey)){
+          delete log[today][item.id][timeKey];
+        }
+      });
+    });
+
+    Object.keys(log[today]).forEach(medId => {
+      if(!items.some(item => item.id === medId)){
+        delete log[today][medId];
+      }
+    });
+
+    saveMedLog(log);
+    return log;
+  }
+
+  function markMedicationStatus(medId, timeKey, status){
+    const medState = loadMedication();
+    if(!medState || !medState.enabled || !medState.items.length) return;
+
+    const today = todayISO();
+    const log = ensureTodayMedLog(medState);
+    const now = nowTime();
+
+    if(!log[today][medId]) log[today][medId] = {};
+    if(!log[today][medId][timeKey]){
+      log[today][medId][timeKey] = { scheduled: timeKey, status:"pendiente", takenAt:"" };
+    }
+
+    if(status === "omitida"){
+      log[today][medId][timeKey].status = "omitida";
+      log[today][medId][timeKey].takenAt = "";
+    } else {
+      log[today][medId][timeKey].status = status;
+      log[today][medId][timeKey].takenAt = now;
+    }
+
+    saveMedLog(log);
+    renderMedication();
+  }
+
+  function evaluateMedicationAlert(medState, dayLog){
+    if(!medState || !medState.enabled || !medState.items.length){
+      return { label:"Sin alerta", cls:"status-pill" };
+    }
+
+    const nowMin = timeToMinutes(nowTime());
+    let hasLate = false;
+    let hasMissed = false;
+    let hasPendingSoon = false;
+
+    medState.items.forEach(item => {
+      item.times.forEach(t => {
+        const entry = dayLog?.[item.id]?.[t];
+        const sched = timeToMinutes(t);
+        if(sched == null || nowMin == null) return;
+
+        if(entry?.status === "omitida"){
+          hasMissed = true;
+          return;
+        }
+
+        if(entry?.status === "pendiente"){
+          const diff = nowMin - sched;
+          if(diff > 60) hasMissed = true;
+          else if(diff > 15) hasLate = true;
+          else if(diff >= -15 && diff <= 15) hasPendingSoon = true;
+        }
+      });
+    });
+
+    if(hasMissed) return { label:"Dosis omitida o muy retrasada", cls:"status-pill status-bad" };
+    if(hasLate) return { label:"Pendiente con retraso", cls:"status-pill status-warn" };
+    if(hasPendingSoon) return { label:"Hora cercana de toma", cls:"status-pill status-warn" };
+    return { label:"En seguimiento", cls:"status-pill status-ok" };
+  }
+
+  function renderMedication(){
+    const medState = loadMedication();
+    ui.medDailyCards.innerHTML = "";
+
+    if(!medState || !medState.enabled || !medState.items.length){
+      ui.medTodaySummary.textContent = "Aún no hay medicación configurada.";
+      ui.medAlertBadge.textContent = "Sin alerta";
+      ui.medAlertBadge.className = "status-pill";
+      return;
+    }
+
+    const log = ensureTodayMedLog(medState);
+    const today = todayISO();
+    const dayLog = log[today] || {};
+
+    ui.medTodaySummary.textContent =
+      `${medState.items.length} medicamento(s) configurado(s) para hoy.`;
+
+    const badge = evaluateMedicationAlert(medState, dayLog);
+    ui.medAlertBadge.textContent = badge.label;
+    ui.medAlertBadge.className = badge.cls;
+
+    medState.items.forEach((item) => {
+      item.times.forEach((t) => {
+        const entry = dayLog?.[item.id]?.[t] || { status:"pendiente", takenAt:"" };
+        let text = "Pendiente";
+        let cls = "status-pill";
+        if(entry.status === "a_tiempo"){
+          text = `Tomada a tiempo${entry.takenAt ? ` · ${entry.takenAt}` : ""}`;
+          cls = "status-pill status-ok";
+        } else if(entry.status === "tarde"){
+          text = `Tomada tarde${entry.takenAt ? ` · ${entry.takenAt}` : ""}`;
+          cls = "status-pill status-warn";
+        } else if(entry.status === "omitida"){
+          text = "Omitida";
+          cls = "status-pill status-bad";
+        }
+
+        ui.medDailyCards.innerHTML += `
+          <div class="med-card">
+            <div class="row">
+              <div>
+                <div><strong>${escapeHtml(item.name)}</strong> · ${escapeHtml(item.dose)}</div>
+                <div class="small">Horario programado: ${escapeHtml(t)}</div>
+                <div class="small">${escapeHtml(item.notes || "Sin notas.")}</div>
+                <div class="${cls}" style="margin-top:8px">${escapeHtml(text)}</div>
+              </div>
+            </div>
+            <div class="row" style="margin-top:12px">
+              <button class="btn take" data-med-action="a_tiempo" data-med-id="${escapeHtml(item.id)}" data-med-time="${escapeHtml(t)}" type="button">Ya la tomé</button>
+              <button class="btn late" data-med-action="tarde" data-med-id="${escapeHtml(item.id)}" data-med-time="${escapeHtml(t)}" type="button">La tomé tarde</button>
+              <button class="btn skip" data-med-action="omitida" data-med-id="${escapeHtml(item.id)}" data-med-time="${escapeHtml(t)}" type="button">Omitida</button>
+            </div>
+          </div>
+        `;
+      });
+    });
+
+    [...document.querySelectorAll("[data-med-action]")].forEach(btn => {
+      btn.addEventListener("click", () => {
+        markMedicationStatus(btn.dataset.medId, btn.dataset.medTime, btn.dataset.medAction);
+      });
+    });
+  }
+
+  function maybeNotifyMedication(){
+    const medState = loadMedication();
+    if(!medState || !medState.enabled || !medState.items.length) return;
+
+    const today = todayISO();
+    const lastAlert = localStorage.getItem(MED_ALERT_LAST_KEY);
+    const nowMin = timeToMinutes(nowTime());
+    const log = ensureTodayMedLog(medState);
+    const dayLog = log[today] || {};
+
+    let shouldAlert = false;
+    let msg = "";
+
+    medState.items.forEach(item => {
+      item.times.forEach(t => {
+        const sched = timeToMinutes(t);
+        if(sched == null || nowMin == null) return;
+        const diff = nowMin - sched;
+        const entry = dayLog?.[item.id]?.[t];
+
+        if(entry?.status === "pendiente" && diff >= -10 && diff <= 20){
+          shouldAlert = true;
+          msg = `Recordatorio: ${item.name} (${item.dose}) programado a las ${t}.`;
+        }
+        if(entry?.status === "pendiente" && diff > 60){
+          shouldAlert = true;
+          msg = `Atención: la toma de ${item.name} de las ${t} sigue pendiente o pudo omitirse.`;
+        }
+      });
+    });
+
+    if(!shouldAlert || !msg) return;
+    if(lastAlert === `${today}-${msg}`) return;
+
+    if ("Notification" in window && Notification.permission === "granted") {
+      try{
+        new Notification("Brújula Emocional · Medicación", { body: msg });
+      }catch{}
+    } else {
+      ui.medTodaySummary.textContent = msg;
+    }
+
+    localStorage.setItem(MED_ALERT_LAST_KEY, `${today}-${msg}`);
+  }
+
+  function renderAll(){
+    const data = loadData();
+    renderHeader(data);
+    renderHero(data);
+    renderToday(data);
+    renderHistory(data);
+    renderWeek(data);
+    drawWeekChart(data);
+    updateReminderUI();
+    updateDiscreetUI();
+    renderMedication();
+  }
+
+  function exportJSON(){
+    const data = {
+      appVersion: APP_VERSION,
+      emotionalLogs: loadData(),
+      medication: loadMedication(),
+      medicationLog: loadMedLog()
+    };
+    const blob = new Blob([JSON.stringify(data, null, 2)], {type:"application/json"});
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `brujula-emocional-${todayISO()}.json`;
+    a.click();
+    URL.revokeObjectURL(url);
+  }
+
+  function importJSON(file){
+    if(!file) return;
+    const reader = new FileReader();
+    reader.onload = () => {
+      try{
+        const parsed = JSON.parse(reader.result);
+
+        if(Array.isArray(parsed)){
+          saveData(parsed);
+        } else {
+          if(Array.isArray(parsed.emotionalLogs)) saveData(parsed.emotionalLogs);
+          if(parsed.medication && typeof parsed.medication === "object") saveMedication(parsed.medication);
+          if(parsed.medicationLog && typeof parsed.medicationLog === "object") saveMedLog(parsed.medicationLog);
+        }
+
+        const medState = loadMedication();
+        medDraftItems = medState.items.slice();
+        renderMedicationDraft();
+        ui.importMsg.textContent = "Respaldo importado correctamente.";
+        renderAll();
+      }catch(e){
+        console.error("Error importando respaldo:", e);
+        ui.importMsg.textContent = "No se pudo importar el archivo. Revisa que sea un JSON válido.";
+      }
+    };
+    reader.readAsText(file);
+  }
+
+  function maybeShowWelcome(){
+    const seen = localStorage.getItem(FIRST_KEY);
+    if(!seen) ui.welcomeOverlay.style.display = "flex";
+  }
+
+  function initReminder(){
+    const enabled = localStorage.getItem(REMINDER_ENABLED_KEY) === "1";
+    const reminderTime = localStorage.getItem(REMINDER_TIME_KEY) || "20:00";
+
+    ui.reminderToggle.checked = enabled;
+    ui.reminderTime.value = reminderTime;
+
+    ui.reminderToggle.addEventListener("change", () => {
+      localStorage.setItem(REMINDER_ENABLED_KEY, ui.reminderToggle.checked ? "1" : "0");
+      updateReminderUI();
+      maybeNotifyReminder();
+    });
+
+    ui.reminderTime.addEventListener("change", () => {
+      localStorage.setItem(REMINDER_TIME_KEY, ui.reminderTime.value || "20:00");
+      updateReminderUI();
+    });
+
+    if ("Notification" in window && Notification.permission === "default") {
+      Notification.requestPermission().catch(()=>{});
+    }
+  }
+
+  function updateReminderUI(){
+    const enabled = localStorage.getItem(REMINDER_ENABLED_KEY) === "1";
+    const reminderTime = localStorage.getItem(REMINDER_TIME_KEY) || "20:00";
+    ui.reminderStatus.textContent = enabled ? reminderTime : "Off";
+    ui.reminderMsg.textContent = enabled
+      ? `Recordatorio emocional activado a las ${reminderTime}. Se mostrará cuando abras la app cerca de esa hora.`
+      : "Si el navegador lo permite, recibirás un aviso local cuando abras la app cerca de esa hora.";
+  }
+
+  function maybeNotifyReminder(){
+    const enabled = localStorage.getItem(REMINDER_ENABLED_KEY) === "1";
+    if(!enabled) return;
+
+    const reminderTime = localStorage.getItem(REMINDER_TIME_KEY) || "20:00";
+    const [hh, mm] = reminderTime.split(":").map(Number);
+    const now = new Date();
+    const currentMinutes = now.getHours() * 60 + now.getMinutes();
+    const targetMinutes = (hh * 60) + mm;
+
+    if(Math.abs(currentMinutes - targetMinutes) > 20) return;
+
+    const today = todayISO();
+    const last = localStorage.getItem(REMINDER_LAST_KEY);
+    if(last === today) return;
+
+    const message = "Momento de registrar cómo te sientes en Brújula Emocional.";
+    if ("Notification" in window && Notification.permission === "granted") {
+      try{
+        new Notification("Brújula Emocional", { body: message });
+      }catch{}
+    } else {
+      ui.reminderMsg.textContent = message;
+    }
+
+    localStorage.setItem(REMINDER_LAST_KEY, today);
+  }
+
+  function initDiscreetMode(){
+    const enabled = localStorage.getItem(DISCREET_KEY) === "1";
+    ui.discreetToggle.checked = enabled;
+    applyDiscreet(enabled);
+
+    ui.discreetToggle.addEventListener("change", () => {
+      const on = ui.discreetToggle.checked;
+      localStorage.setItem(DISCREET_KEY, on ? "1" : "0");
+      applyDiscreet(on);
+      updateDiscreetUI();
+    });
+  }
+
+  function applyDiscreet(on){
+    document.body.classList.toggle("discreet", on);
+  }
+
+  function updateDiscreetUI(){
+    const on = localStorage.getItem(DISCREET_KEY) === "1";
+    ui.discreetStatus.textContent = on ? "On" : "Off";
+  }
+
+  function initModals(){
+    ui.aboutBtn.addEventListener("click", () => ui.aboutModal.style.display = "flex");
+    ui.licenseBtn.addEventListener("click", () => ui.licenseModal.style.display = "flex");
+    ui.closeAboutBtn.addEventListener("click", () => ui.aboutModal.style.display = "none");
+    ui.closeLicenseBtn.addEventListener("click", () => ui.licenseModal.style.display = "none");
+
+    [ui.aboutModal, ui.licenseModal].forEach(modal => {
+      modal.addEventListener("click", (e) => {
+        if(e.target === modal) modal.style.display = "none";
+      });
+    });
+  }
+
+  function initMedication(){
+    const medState = loadMedication();
+    ui.medEnabled.checked = !!medState.enabled;
+    medDraftItems = medState.items.slice();
+    updateMedicationFrequencyUI();
+    toggleMedicationForm();
+    renderMedicationDraft();
+
+    ui.medEnabled.addEventListener("change", toggleMedicationForm);
+    ui.medFrequency.addEventListener("change", updateMedicationFrequencyUI);
+
+    ui.addMedBtn.addEventListener("click", () => {
+      const medItem = buildMedicationFromInputs();
+
+      if(!medItem.name || !medItem.dose || !medItem.times.length){
+        alert("Completa al menos nombre, dosis y un horario.");
+        return;
+      }
+
+      medDraftItems.push(medItem);
+      renderMedicationDraft();
+      clearMedicationInputs();
+      alert("Medicamento agregado a la lista.");
+    });
+
+    ui.saveMedBtn.addEventListener("click", () => {
+      const enabled = ui.medEnabled.checked;
+
+      if(enabled && medDraftItems.length === 0){
+        alert("Agrega al menos un medicamento a la lista antes de guardar.");
+        return;
+      }
+
+      saveMedication({
+        enabled,
+        items: medDraftItems
+      });
+
+      renderMedication();
+      maybeNotifyMedication();
+      alert("Lista de medicamentos guardada.");
+    });
+  }
+
+  function initInstallPrompt(){
+    window.addEventListener("beforeinstallprompt", (e) => {
+      e.preventDefault();
+      deferredInstallPrompt = e;
+      ui.installBtn.style.display = "block";
+      ui.installMsg.textContent = "Puedes instalar Brújula Emocional como app en este dispositivo.";
+    });
+
+    ui.installBtn.addEventListener("click", async () => {
+      if(!deferredInstallPrompt) return;
+      deferredInstallPrompt.prompt();
+      try{
+        await deferredInstallPrompt.userChoice;
+      }catch{}
+      deferredInstallPrompt = null;
+      ui.installBtn.style.display = "none";
+    });
+
+    window.addEventListener("appinstalled", () => {
+      ui.installBtn.style.display = "none";
+      ui.installMsg.textContent = "La app ya fue instalada.";
+      deferredInstallPrompt = null;
+    });
+  }
+
+  async function registerServiceWorker(){
+    if (!("serviceWorker" in navigator)) return;
+
+    try {
+      const reg = await navigator.serviceWorker.register("./sw.js", { updateViaCache: "none" });
+      console.log("Service worker registrado:", reg);
+
+      if (reg.waiting) {
+        reg.waiting.postMessage({ type: "SKIP_WAITING" });
+      }
+
+      reg.addEventListener("updatefound", () => {
+        const newWorker = reg.installing;
+        if (!newWorker) return;
+        newWorker.addEventListener("statechange", () => {
+          if (newWorker.state === "installed" && navigator.serviceWorker.controller) {
+            console.log("Nueva versión del service worker instalada.");
+          }
+        });
+      });
+    } catch (err) {
+      console.error("Error registrando service worker:", err);
+    }
+  }
+
+  function init(){
+    console.log("Brújula Emocional:", APP_VERSION);
+
+    if (!storageDisponible()) {
+      alert("Este navegador está bloqueando el almacenamiento local o no lo está conservando.");
+    }
+
+    migrateOldDataIfNeeded();
+    migrateOldMedicationIfNeeded();
+
+    ui.date.value = todayISO();
+    ui.time.value = nowTime();
+    randomGeneralQuote();
+    initTheme();
+    initMoodButtons();
+    maybeShowWelcome();
+    initReminder();
+    initDiscreetMode();
+    initModals();
+    initMedication();
+    initInstallPrompt();
+    maybeNotifyReminder();
+    maybeNotifyMedication();
+
+    ui.closeWelcomeBtn.addEventListener("click", () => {
+      ui.welcomeOverlay.style.display = "none";
+      localStorage.setItem(FIRST_KEY, "1");
+    });
+
+    ui.emotion.addEventListener("change", syncMoodFromEmotion);
+
+    [...ui.bodyChips, ...ui.careChips].forEach(ch => {
+      ch.dataset.on = "0";
+      ch.addEventListener("click", () => {
+        ch.dataset.on = ch.dataset.on === "1" ? "0" : "1";
+      });
+    });
+
+    ui.saveBtn.addEventListener("click", () => {
+      addEntry(makeEntry(false));
+      clearForm();
+      showMsg("Registro guardado ✓");
+    });
+
+    ui.quickBtn.addEventListener("click", () => {
+      addEntry(makeEntry(true));
+      clearForm();
+      showMsg("Registro breve guardado ✓");
+    });
+
+    ui.clearBtn.addEventListener("click", () => {
+      clearForm();
+      showMsg("Formulario limpio");
+    });
+
+    ui.newQuoteBtn.addEventListener("click", () => {
+      setQuoteForEmotion(ui.emotion.value || getSelectedMood() || "calma");
+    });
+
+    ui.exportBtn.addEventListener("click", exportJSON);
+
+    ui.deleteAllBtn.addEventListener("click", () => {
+      if(!confirm("¿Seguro que quieres borrar todos los registros guardados en este dispositivo?")) return;
+      localStorage.removeItem(DATA_KEY);
+      localStorage.removeItem(MED_KEY);
+      localStorage.removeItem(MED_LOG_KEY);
+      localStorage.removeItem(OLD_MED_KEY);
+      localStorage.removeItem(OLD_MED_LOG_KEY);
+      medDraftItems = [];
+      renderMedicationDraft();
+      renderAll();
+      ui.importMsg.textContent = "";
+      showMsg("Datos borrados");
+    });
+
+    ui.importFile.addEventListener("change", (e) => {
+      const file = e.target.files && e.target.files[0];
+      importJSON(file);
+    });
+
+    renderAll();
+    registerServiceWorker();
+  }
+
+  init();
+})();
 </script>
-<script>
-
-if("serviceWorker" in navigator){
-
-navigator.serviceWorker.register("./sw.js")
-
-}
-
-</script>
-</div>
-
 </body>
-
 </html>
