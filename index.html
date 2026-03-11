@@ -197,11 +197,26 @@ textarea{resize:vertical;min-height:84px}
 }
 .chips{display:flex;flex-wrap:wrap;gap:8px}
 .chip{
-  padding:8px 11px;border-radius:999px;border:1px solid var(--line);
-  background:var(--chip);font-size:12px;cursor:pointer;user-select:none
+  padding:8px 11px;
+  border-radius:999px;
+  border:1px solid var(--line);
+  background:var(--chip);
+  font-size:12px;
+  cursor:pointer;
+  user-select:none;
+  transition:all .18s ease;
 }
-.chip[data-on="1"]{background:var(--chip-on);border-color:color-mix(in srgb, var(--accent) 55%, white)}
-.tag{
+
+.chip:hover{
+  transform:scale(1.05);
+}
+
+.chip[data-on="1"]{
+  background:var(--chip-on);
+  border-color:color-mix(in srgb, var(--accent) 55%, white);
+  transform:scale(1.08);
+  box-shadow:0 4px 12px rgba(0,0,0,.15);
+}.tag{
   display:inline-flex;align-items:center;gap:6px;padding:6px 10px;border:1px solid var(--line);
   border-radius:999px;background:var(--chip);color:var(--muted);font-size:11px
 }
@@ -722,12 +737,29 @@ canvas{
 
       <div class="card">
         <h2>Gráfica semanal</h2>
+        
         <div class="small">Muestra la intensidad promedio de los últimos 7 días.</div>
         <div style="margin-top:10px">
           <canvas id="weekChart" width="520" height="220"></canvas>
         </div>
       </div>
+<div class="card privacy-mask">
+<h2>Mapa emocional (últimos 30 días)</h2>
+<div class="small">Cada cuadro representa un día según la intensidad emocional registrada.</div>
 
+<div id="emotionCalendar" style="
+margin-top:12px;
+display:grid;
+grid-template-columns:repeat(10,1fr);
+gap:6px;"></div>
+
+<div class="small" style="margin-top:10px">
+<span style="color:#22c55e">■</span> tranquilo
+<span style="color:#f59e0b;margin-left:8px">■</span> medio
+<span style="color:#ef4444;margin-left:8px">■</span> difícil
+</div>
+
+</div>
       <div class="card privacy-mask">
         <h2>Resumen semanal</h2>
         <div class="kpis">
